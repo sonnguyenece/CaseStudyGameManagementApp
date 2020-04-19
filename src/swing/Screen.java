@@ -1,13 +1,8 @@
 package swing;
 
-import sun.awt.X11.Screen;
-
 import javax.swing.*;
-import javax.xml.soap.Text;
-import java.awt.*;
-import java.util.ArrayList;
 
-public class Interface {
+public class Screen extends JFrame {
     private JPanel mainPanel;
     private JButton homeButton;
     private JLabel searchIcon;
@@ -24,13 +19,15 @@ public class Interface {
         addButton = new JButton(new ImageIcon("image/addIcon.png"));
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("GAME MANAGEMENT");
-        frame.setContentPane(new Interface().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    Screen() {
+        super("GAME MANAGEMENT");
+        this.setContentPane(mainPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
     }
 
-
+    public static void main(String[] args) {
+        Screen screen =new Screen();
+        screen.setVisible(true);
+    }
 }
