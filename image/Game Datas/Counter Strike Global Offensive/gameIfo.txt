@@ -1,0 +1,18 @@
+Name : Counter Strike Global Offensive
+
+Developer : Valve
+
+Description: Counter-Strike: Global Offensive (CS:GO) is a multiplayer first-person shooter video game developed by Valve and Hidden Path Entertainment. ... The game pits two teams against each other: the Terrorists and the Counter-Terrorists. Both sides are tasked with eliminating the other while also completing separate objectives.
+
+Play this game on Steam
+
+gameID: 730
+
+genre : Action,Strategy,Multiplayer,First-person shooter
+
+languages : english,dutch,russian,japanese
+
+homepage: https://blog.counter-strike.net/
+
+metacritic score : 8,3
+

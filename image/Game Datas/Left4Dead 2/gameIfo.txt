@@ -1,0 +1,18 @@
+Name : Left4Dead2
+
+Developer : Valve
+
+Description :Set during the aftermath of an apocalyptic pandemic, Left 4 Dead 2 focuses on four new Survivors, fighting against hordes of zombies, known as the Infected, who develop severe psychosis and act extremely aggressive. One of the best Co_op games.
+
+Play this game on Steam
+
+gameID: 550
+
+genre : First-person shooter, horror,cooperation,multi player
+
+languages : english,dutch,russian,japanese
+
+homepage: http://www.l4d.com/
+
+metacritic score : 8,9
+

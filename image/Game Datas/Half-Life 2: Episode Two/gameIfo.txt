@@ -1,0 +1,18 @@
+Name : Half-Life 2: Epsisode Two
+
+Developer : Valve
+
+Description :Players control Gordon Freeman, who travels through the mountains surrounding City 17 to a resistance base with his ally Alyx Vance. Like previous Half-Life games, Episode Two combines shooting, puzzle-solving, and narrative, but adds expansive environments and less linear sequences.
+
+Play this game on Steam
+
+gameID: 420
+
+genre : First-person shooter,adventure
+
+languages : english,dutch,russian,japanese
+
+homepage: http://orange.half-life2.com/
+
+metacritic score : 9,0
+

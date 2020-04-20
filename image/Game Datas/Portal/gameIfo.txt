@@ -1,0 +1,18 @@
+Name : Portal
+
+Developer : Valve
+
+Description :Portal consists primarily of a series of puzzles that must be solved by teleporting the player's character and simple objects using "the Aperture Science Handheld Portal Device", a device that can create inter-spatial portals between two flat planes. Portal is often cited as one of the greatest video games of all time.
+
+Play this game on Steam
+
+gameID: 400
+
+genre : action,platform,adventure,single player
+
+languages : english,dutch,russian,japanese
+
+homepage: http://orange.half-life2.com/
+
+metacritic score : 9,0
+

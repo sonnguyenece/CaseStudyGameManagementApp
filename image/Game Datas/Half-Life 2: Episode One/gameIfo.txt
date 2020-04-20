@@ -1,0 +1,17 @@
+Name : Half-Life 2: Epsisode One
+Developer : Valve
+
+Description :Half-Life 2: Episode One is a 2006 first-person shooter game developed and published by Valve. Like previous Half-Life games, it combines shooting, puzzle-solving, and narrative. Players control scientist Gordon Freeman, who, alongside his companion Alyx Vance, must escape City 17 before an explosion destroys it.
+
+Play this game on Steam
+
+gameID: 380
+
+genre : First-person shooter,adventure
+
+languages : english,dutch,russian,japanese
+
+homepage: http://orange.half-life2.com/
+
+metacritic score : 8,7
+

@@ -1,0 +1,11 @@
+Name : Mahjongg
+
+Description :Disassemble a pile of tiles by removing matching pairs
+
+gameID: gnome-mahjongg
+
+genre : stratedy,platform
+
+homepage: http://gnome-sudoku.sourceforge.net/
+
+

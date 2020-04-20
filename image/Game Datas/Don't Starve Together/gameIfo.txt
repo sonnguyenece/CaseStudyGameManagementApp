@@ -1,0 +1,20 @@
+Name : Don't Starve Together
+
+Developer : Klei Entertainment
+
+Description: Don't Starve Together is the standalone multiplayer expansion of the uncompromising wilderness survival game, Don't Starve. Enter a strange and unexplored world full of strange creatures, dangers, and surprises. Gather resources to craft items and structures that match your survival style
+
+Play this game on Steam
+
+gameID: 322330
+
+genre : Action,Strategy,Cooperation
+
+languages : english,dutch,russian,japanese
+
+homepage: http://www.dontstarvegame.com
+
+metacritic score : 8,3
+
+iconPath: "image/Game Datas/Don't Starve Together/image/icon.jpg"
+

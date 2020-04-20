@@ -1,0 +1,11 @@
+Name : Sudoku
+
+Description :Test your logic skills in this number grid puzzle
+
+gameID: gnome-sudoku
+
+genre : stratedy,platform
+
+homepage: http://gnome-sudoku.sourceforge.net/
+
+

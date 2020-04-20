@@ -1,0 +1,18 @@
+Name : Half-Life 2
+
+Developer : Valve
+
+Description: Half-Life 2 is a 2004 first-person shooter game developed and published by Valve. Like the original Half-Life, it combines shooting, puzzles, and storytelling, and adds features such as vehicles and physics-based gameplay. ... The game was created using Valve's Source engine, developed alongside.
+
+Play this game on Steam
+
+gameID: 220
+
+genre : First-person shooter,adventure
+
+languages : english,dutch,russian,japanese
+
+homepage: http://orange.half-life2.com/
+
+metacritic score : 9,6
+

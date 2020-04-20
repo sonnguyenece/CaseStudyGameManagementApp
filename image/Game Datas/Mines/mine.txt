@@ -1,0 +1,11 @@
+Name : Mines
+
+Description :Clear hidden mines from a minefield
+
+gameID: gnome-mines
+
+genre : stratedy,platform
+
+homepage: http://gnome-sudoku.sourceforge.net/
+
+
