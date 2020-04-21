@@ -15,13 +15,13 @@ public class Game implements Comparable<Game> {
     private String gameID;
     private String gameHomepage;
     private String headerImage;
-    private ArrayList<String> gameImage = new ArrayList();
+    private ArrayList<String> screenShot = new ArrayList();
     private ArrayList<String> gameLanguage;
     private ArrayList<String> genre;
     private int playTime;
     private float gamePrice;
     private float gameSize;
-    private float gameScore;
+    private String gameScore;
     private boolean isSteamGame;
     private boolean isValidateName;
     private boolean isValidateID;
@@ -31,25 +31,36 @@ public class Game implements Comparable<Game> {
     private static final String STEAMGAMEID = "[0-9]+";
     private static final String NONSTEAMGAMEID = "^[0-9a-zA-z].*";
     private static final String GAMENAME_REGEX = "^[0-9a-zA-z].*";
+    private static final String GAMEIMAGEPATH_REGEX = "^[0-9a-zA-z].*";
 
     public Game() {
         this.gameLanguage = new ArrayList();
         this.genre = new ArrayList();
 //        this.gameImage = new ArrayList();
         isRunning = false;
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.headerImage="image/imgNotFoundHeader.png";
     }
 
-    public Game(String name, Boolean isSteamGame, String gameID, String iconPath, float score) {
+    public Game(String name, Boolean isSteamGame, String gameID, String iconPath, String score) {
         setName(name);
         this.iconPath = iconPath;
         setGameID(gameID, isSteamGame);
         this.isSteamGame = isSteamGame;
         this.gameScore = score;
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.headerImage="image/imgNotFoundHeader.png";
     }
 
     public Game(String name, String developer, String iconPath, String screenShotPath, String description,
                 String gameID, String gameImage, int playTime, String lastPlayed, String gameLanguage,
-                String gameGenre, float gameScore, String gameHomepage, boolean isSteamGame) {
+                String gameGenre, String gameScore, String gameHomepage, boolean isSteamGame) {
         setName(name);
         this.developer = developer;
         this.iconPath = iconPath;
@@ -65,7 +76,8 @@ public class Game implements Comparable<Game> {
         this.isSteamGame = isSteamGame;
         setGameLanguage(gameLanguage);
         setGameGenre(gameGenre);
-        setGameImage(gameImage);
+        setScreenShot(gameImage);
+        this.headerImage="image/imgNotFoundHeader.png";
     }
 
     private void setGameLanguage(String gameLanguage) {
@@ -88,22 +100,26 @@ public class Game implements Comparable<Game> {
     }
 
     public void setHeaderImage(String headerImage) {
+
         this.headerImage = headerImage;
     }
 
-    public void setGameImage(String gameImagePath) {
+    public void setScreenShot(String gameImagePath) {
+        this.screenShot.clear();
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
         if (gameImagePath.contains(",")) {
             String[] tempgameImage = gameImagePath.trim().split(",");
             for (String image : tempgameImage) {
-                this.gameImage.add(image.trim());
+                this.screenShot.add(0, (image.trim()));
             }
-        } else if (!gameImagePath.contains(" ")) {
-            this.gameImage.add(gameImagePath);
         }
     }
 
-    public ArrayList<String> getGameImage() {
-        return gameImage;
+    public ArrayList<String> getScreenShot() {
+        return screenShot;
     }
 
     private void setGameGenre(String gameGenre) {
@@ -151,9 +167,9 @@ public class Game implements Comparable<Game> {
         return screenShotPath;
     }
 
-    public void setScreenShotPath(String screenShotPath) {
-        this.screenShotPath = screenShotPath;
-    }
+//    public void setScreenShotPath(String screenShotPath) {
+//        this.screenShotPath = screenShotPath;
+//    }
 
     public int getPlayTime() {
         return playTime;
@@ -218,11 +234,11 @@ public class Game implements Comparable<Game> {
         this.gameSize = gameSize;
     }
 
-    public float getGameScore() {
+    public String getGameScore() {
         return gameScore;
     }
 
-    public void setGameScore(float gameScore) {
+    public void setGameScore(String gameScore) {
         this.gameScore = gameScore;
     }
 
@@ -242,14 +258,19 @@ public class Game implements Comparable<Game> {
         isSteamGame = steamGame;
     }
 
-    public void playGame() throws Exception {
-        if (this.isSteamGame) {
-            if (this.isValidateID && this.isValidateName) playSteamGame();
-            else this.isRunning = false;
-        } else {
-            if (this.isValidateID && this.isValidateName) playNonSteamGame();
-            else this.isRunning = false;
+    public void playGame() {
+        try {
+            if (this.isSteamGame) {
+                if (this.isValidateID && this.isValidateName) playSteamGame();
+                else this.isRunning = false;
+            } else {
+                if (this.isValidateID && this.isValidateName) playNonSteamGame();
+                else this.isRunning = false;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void setGameID(String gameID) {

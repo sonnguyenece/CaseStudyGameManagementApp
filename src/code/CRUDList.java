@@ -54,11 +54,19 @@ public class CRUDList {
         Collections.sort(gameList);
     }
 
-    public void sortByScore() {
+    public void sortFromLowestScore() {
         Collections.sort(gameList, new Comparator<Game>() {
             @Override
-            public int compare(Game game, Game t1) {
-                return -(int) ((game.getGameScore() - t1.getGameScore()) * 10);
+            public int compare(Game game, Game g) {
+                return game.getGameScore().compareTo(g.getGameScore());
+            }
+        });
+    }
+    public void sortFromHighestScore() {
+        Collections.sort(gameList, new Comparator<Game>() {
+            @Override
+            public int compare(Game game, Game g) {
+                return - game.getGameScore().compareTo(g.getGameScore());
             }
         });
     }

@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Screen extends JFrame {
     public static final int PLAYBUTTON_WIDTH = 180;
@@ -29,15 +30,23 @@ public class Screen extends JFrame {
     private JLabel gameScore;
     private JLabel developer;
     private JLabel homepage;
+    private JLabel screenshot1;
+    private JLabel screenshot2;
+    private JLabel screenshot3;
+    private JLabel screenshot4;
+    private JPanel headerPanel;
+    private JPanel infoPanel;
+    private JPanel timePlayPanel;
+    private JLabel screenshotLabel;
     private DefaultListModel defaultListGameModel;
     public CRUDList crudList;
+    private Game selectedGame;
 
     public Screen() {
         super("GAME MANAGEMENT");
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
-
         specifyJpanel.setVisible(false);
 //        specifyJpanel.setPreferredSize(new Dimension(1000, 50));
 
@@ -49,29 +58,47 @@ public class Screen extends JFrame {
                 int gameIndex = gameSmallList.getSelectedIndex();
                 if (gameIndex >= 0) {
                     specifyJpanel.setVisible(true);
-                    Game selectedGame = crudList.getGameList().get(gameIndex);
+                    selectedGame = crudList.getGameList().get(gameIndex);
 
+                    headerPanel.setPreferredSize(new Dimension(1100, 400));
                     header.setIcon(new ImageIcon(selectedGame.getHeaderImage()));
 
+                    infoPanel.setPreferredSize(new Dimension(10, 10));
+                    timePlayPanel.setPreferredSize(new Dimension(50, 50));
                     playButton.setPreferredSize(new Dimension(PLAYBUTTON_WIDTH, PLAYBUTTON_HEIGHT));
                     playButton.setIcon(new ImageIcon("image/playIcon.png"));
-                    lastPlayed.setText("Last Played : " + " dd/mm/yyyy          ");
+                    lastPlayed.setText("Last Played : " + " dd/mm/yyyy         ");
                     lastPlayed.setFont(new Font("Arial", Font.ITALIC, 20));
                     playTime.setText("Play Time :" + " Hours            ");
                     playTime.setFont(new Font("Arial", Font.ITALIC, 20));
-                    gameScore.setText("Game Score : "+selectedGame.getGameScore());
+                    gameScore.setText("             Game Score : " + selectedGame.getGameScore());
                     gameScore.setFont(new Font("Arial", Font.PLAIN, 20));
-                    developer.setText("Developer: "+selectedGame.getDeveloper()+"       ");
+                    developer.setText("Developer: " + selectedGame.getDeveloper() + "       ");
                     developer.setFont(new Font("Arial", Font.PLAIN, 20));
-                    homepage.setText("Homepage: "+selectedGame.getGameHomepage());
+                    homepage.setText("Homepage: " + selectedGame.getGameHomepage());
                     homepage.setFont(new Font("Arial", Font.PLAIN, 20));
-
 
                     description.setText(selectedGame.getDescription());
                     description.setFont(new Font("Consolas", Font.ITALIC, 20));
                     description.setForeground(Color.WHITE);
 
+                    screenshotLabel.setText("SCREENSHOTS");
+                    screenshotLabel.setFont(new Font("Arial", Font.BOLD, 25));
+                    screenshotLabel.setForeground(Color.ORANGE);
+
+                    screenshot1.setIcon(new ImageIcon(selectedGame.getScreenShot().get(0)));
+                    screenshot2.setIcon(new ImageIcon(selectedGame.getScreenShot().get(1)));
+                    screenshot3.setIcon(new ImageIcon(selectedGame.getScreenShot().get(2)));
+                    screenshot4.setIcon(new ImageIcon(selectedGame.getScreenShot().get(3)));
                 }
+            }
+        });
+
+
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedGame.playGame();
             }
         });
     }
@@ -81,10 +108,6 @@ public class Screen extends JFrame {
         searchButton = new JButton(new ImageIcon("image/filter.png"));
         homeButton = new JButton(new ImageIcon("image/homeIcon.png"));
         addButton = new JButton(new ImageIcon("image/addIcon.png"));
-//        header= new JLabel(new ImageIcon("image/Game Datas/HalfLife2/image/header.resized.png"));
-//        description = new JLabel();
-//    screenShot1 =new JLabel(new ImageIcon("image/Game Datas/HalfLife2/image/screenshot1.jpg"));
-//    screenShot2 =new JLabel(new ImageIcon("image/Game Datas/HalfLife2/image/screenshot2.jpg"));
     }
 
     public CRUDList getCrudList() {
