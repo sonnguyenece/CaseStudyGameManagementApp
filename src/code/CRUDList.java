@@ -9,7 +9,7 @@ public class CRUDList {
     private ArrayList<Game> gameList;
     private int quantityGames;
 
-    CRUDList() {
+    public CRUDList() {
         gameList = new ArrayList<Game>();
         quantityGames = 0;
     }
@@ -34,14 +34,15 @@ public class CRUDList {
     }
 
     public void addGame(Game game) {
-        gameList.add(game);
-        quantityGames++;
+        this.gameList.add(game);
+       this.quantityGames++;
     }
 
     public void editGame(int index) {
     }
 
     public void deleteGame(int index) {
+        gameList.remove(index);
         quantityGames--;
     }
 

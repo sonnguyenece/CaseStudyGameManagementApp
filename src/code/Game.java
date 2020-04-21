@@ -14,7 +14,8 @@ public class Game implements Comparable<Game> {
     private String description;
     private String gameID;
     private String gameHomepage;
-    private ArrayList<String> gameImage;
+    private String headerImage;
+    private ArrayList<String> gameImage = new ArrayList();
     private ArrayList<String> gameLanguage;
     private ArrayList<String> genre;
     private int playTime;
@@ -34,7 +35,7 @@ public class Game implements Comparable<Game> {
     public Game() {
         this.gameLanguage = new ArrayList();
         this.genre = new ArrayList();
-        this.gameImage = new ArrayList();
+//        this.gameImage = new ArrayList();
         isRunning = false;
     }
 
@@ -82,14 +83,22 @@ public class Game implements Comparable<Game> {
         return gameLanguage;
     }
 
-    private void setGameImage(String gameImage) {
-        if (gameImage.contains(",")) {
-            String[] tempgameImage = gameImage.trim().split(",");
+    public String getHeaderImage() {
+        return headerImage;
+    }
+
+    public void setHeaderImage(String headerImage) {
+        this.headerImage = headerImage;
+    }
+
+    public void setGameImage(String gameImagePath) {
+        if (gameImagePath.contains(",")) {
+            String[] tempgameImage = gameImagePath.trim().split(",");
             for (String image : tempgameImage) {
                 this.gameImage.add(image.trim());
             }
-        } else if (!gameImage.contains(" ")) {
-            this.gameImage.add(gameImage);
+        } else if (!gameImagePath.contains(" ")) {
+            this.gameImage.add(gameImagePath);
         }
     }
 
@@ -247,9 +256,9 @@ public class Game implements Comparable<Game> {
         this.gameID = gameID;
     }
 
-    public void setGameImage(ArrayList<String> gameImage) {
-        this.gameImage = gameImage;
-    }
+//    public void setGameImage(ArrayList<String> gameImage) {
+//        this.gameImage = gameImage;
+//    }
 
     public void setGameLanguage(ArrayList<String> gameLanguage) {
         this.gameLanguage = gameLanguage;
