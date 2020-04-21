@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Screen screen = new Screen();
         screen.setVisible(true);
-
         Game supertux2 = new Game("Supertux 2", false, "supertux2", "image/Game Datas/Supertux2/image/icon.jpg", "3");
         Game halfLife = new Game("Half Life 2", true, "220", "image/Game Datas/HalfLife2/image/icon.png", "10");
         Game left4Dead = new Game("Left4Dead 2", true, "550", "image/Game Datas/Left4Dead 2/image/icon.jpg", "5");
@@ -39,5 +38,6 @@ public class Main {
         screen.getCrudList().sortByName();
 //        screen.getCrudList().sortFromHighestScore();
         screen.refreshGameList();
+        screen.autoClickHomeFirst();
     }
 }

@@ -258,21 +258,6 @@ public class Game implements Comparable<Game> {
         isSteamGame = steamGame;
     }
 
-    public void playGame() {
-        try {
-            if (this.isSteamGame) {
-                if (this.isValidateID && this.isValidateName) playSteamGame();
-                else this.isRunning = false;
-            } else {
-                if (this.isValidateID && this.isValidateName) playNonSteamGame();
-                else this.isRunning = false;
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
@@ -319,6 +304,20 @@ public class Game implements Comparable<Game> {
 
     public void setRunning(boolean running) {
         isRunning = running;
+    }
+    public void playGame() {
+        try {
+            if (this.isSteamGame) {
+                if (this.isValidateID && this.isValidateName) playSteamGame();
+                else this.isRunning = false;
+            } else {
+                if (this.isValidateID && this.isValidateName) playNonSteamGame();
+                else this.isRunning = false;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void playSteamGame() throws Exception {

@@ -7,11 +7,21 @@ import java.util.List;
 
 public class CRUDList {
     private ArrayList<Game> gameList;
+    private ArrayList<Game> gameSearchList;
     private int quantityGames;
 
     public CRUDList() {
         gameList = new ArrayList<Game>();
+        gameSearchList = new ArrayList<Game>();
         quantityGames = 0;
+    }
+
+    public ArrayList<Game> getGameSearchList() {
+        return gameSearchList;
+    }
+
+    public void setGameSearchList(ArrayList<Game> gameSearchList) {
+        this.gameSearchList = gameSearchList;
     }
 
     public ArrayList<Game> getGameList() {
@@ -35,7 +45,7 @@ public class CRUDList {
 
     public void addGame(Game game) {
         this.gameList.add(game);
-       this.quantityGames++;
+        this.quantityGames++;
     }
 
     public void editGame(int index) {
@@ -46,8 +56,14 @@ public class CRUDList {
         quantityGames--;
     }
 
-    public void search() {
-
+    public void search(String searchText) {
+        gameSearchList.clear();
+        for (Game game : this.gameList) {
+            if (game.getName().toUpperCase().contains(searchText) || game.getName().toLowerCase().contains(searchText)
+                    || game.getName().contains(searchText)) {
+                gameSearchList.add(game);
+            }
+        }
     }
 
     public void sortByName() {
@@ -62,11 +78,12 @@ public class CRUDList {
             }
         });
     }
+
     public void sortFromHighestScore() {
         Collections.sort(gameList, new Comparator<Game>() {
             @Override
             public int compare(Game game, Game g) {
-                return - game.getGameScore().compareTo(g.getGameScore());
+                return -game.getGameScore().compareTo(g.getGameScore());
             }
         });
     }

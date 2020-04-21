@@ -230,7 +230,7 @@
           </grid>
         </children>
       </grid>
-      <scrollpane id="1e2f6">
+      <scrollpane id="1e2f6" binding="specifyJScrollPane">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <maximum-size width="1200" height="-1"/>
@@ -238,6 +238,7 @@
         </constraints>
         <properties>
           <background color="-10592674"/>
+          <horizontalScrollBarPolicy value="31"/>
         </properties>
         <border type="none"/>
         <children>

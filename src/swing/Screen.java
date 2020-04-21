@@ -2,17 +2,20 @@ package swing;
 
 import code.CRUDList;
 import code.Game;
+import code.HomeImage;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Screen extends JFrame {
     public static final int PLAYBUTTON_WIDTH = 180;
     public static final int PLAYBUTTON_HEIGHT = 50;
     private JPanel mainPanel;
+    private JPanel homeSpecifyPanel;
     private JButton homeButton;
     private JLabel searchIcon;
     private JButton searchButton;
@@ -20,6 +23,7 @@ public class Screen extends JFrame {
     private JButton addButton;
     private JLabel quantityGames;
     private JList gameSmallList;
+    private JList gameSearchList;
     private JPanel headerImg;
     private JLabel header;
     private JLabel description;
@@ -38,9 +42,14 @@ public class Screen extends JFrame {
     private JPanel infoPanel;
     private JPanel timePlayPanel;
     private JLabel screenshotLabel;
+    private JScrollPane specifyJScrollPane;
+    private Object specifyJScrollPaneTemp;
     private DefaultListModel defaultListGameModel;
+    private DefaultListModel defaultListGameSearchModel;
     public CRUDList crudList;
     private Game selectedGame;
+    private boolean isPressHomeButton;
+
 
     public Screen() {
         super("GAME MANAGEMENT");
@@ -48,16 +57,17 @@ public class Screen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         specifyJpanel.setVisible(false);
-//        specifyJpanel.setPreferredSize(new Dimension(1000, 50));
 
         defaultListGameModel = new DefaultListModel<>();
         gameSmallList.setModel(defaultListGameModel);
         gameSmallList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
+
                 int gameIndex = gameSmallList.getSelectedIndex();
                 if (gameIndex >= 0) {
                     specifyJpanel.setVisible(true);
+                    specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                     selectedGame = crudList.getGameList().get(gameIndex);
 
                     headerPanel.setPreferredSize(new Dimension(1100, 400));
@@ -91,6 +101,37 @@ public class Screen extends JFrame {
                     screenshot3.setIcon(new ImageIcon(selectedGame.getScreenShot().get(2)));
                     screenshot4.setIcon(new ImageIcon(selectedGame.getScreenShot().get(3)));
                 }
+
+            }
+        });
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HomeImage homeImage = new HomeImage();
+                header.setIcon(new ImageIcon(homeImage.selectionImage()));
+//                long startTime = System.currentTimeMillis() / 1000;
+//                long endTime = startTime + 3;
+                specifyJpanel.setVisible(true);
+
+//                if (startTime >= endTime) {
+//                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
+//                    endTime = startTime + 3;
+//                }
+
+                specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+                searchTextField.setText("");
+                refreshGameList();
+            }
+        });
+
+        searchTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                String searchText = searchTextField.getText();
+                crudList.search(searchText);
+                refreshGameList();
             }
         });
 
@@ -101,6 +142,7 @@ public class Screen extends JFrame {
                 selectedGame.playGame();
             }
         });
+
     }
 
     private void createUIComponents() {
@@ -121,13 +163,23 @@ public class Screen extends JFrame {
     public void refreshGameList() {
         defaultListGameModel.removeAllElements();
         defaultListGameModel.clear();
-        for (Game g : crudList.getGameList()) {
-            defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
+        if (searchTextField.getText().equals("")) {
+            for (Game g : crudList.getGameList()) {
+                defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
+            }
+        } else {
+            for (Game g : crudList.getGameSearchList()) {
+                defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
+            }
         }
         gameSmallList.setCellRenderer(new Renderer());
         gameSmallList.setModel(defaultListGameModel);
-
         quantityGames.setText("GAMES (" + crudList.getGameList().size() + ")");
+
+    }
+
+    public void autoClickHomeFirst() {
+        homeButton.doClick();
     }
 
 }
