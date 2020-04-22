@@ -24,7 +24,7 @@ public class Main {
         halfLife.setHeaderImage("image/Game Datas/HalfLife2/image/header.resized.png");
         halfLife.setDeveloper("Valve");
         halfLife.setGameScore("9.6");
-        halfLife.setGameHomepage("Valve.com");
+        halfLife.setGameHomepage("http://orange.half-life2.com/");
         halfLife.setScreenShot("image/Game Datas/HalfLife2/image/screenshot4.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot3.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot2.jpg," +

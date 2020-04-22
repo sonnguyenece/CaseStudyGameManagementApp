@@ -56,10 +56,27 @@ public class CRUDList {
         quantityGames--;
     }
 
+    public void deleteSearchGame(int index) {
+        delGameInGamelistBySearch(index);
+        gameSearchList.remove(index);
+        quantityGames--;
+    }
+
+    public void delGameInGamelistBySearch(int index) {
+        Game gameTemp = gameSearchList.get(index);
+        for (int i = 0; i < gameList.size(); i++) {
+            if (gameTemp.equals(gameList.get(i))) {
+                gameList.remove(i);
+//                System.out.println(i);
+            }
+        }
+    }
+
     public void search(String searchText) {
         gameSearchList.clear();
         for (Game game : this.gameList) {
-            if (game.getName().toUpperCase().contains(searchText) || game.getName().toLowerCase().contains(searchText)
+            if (game.getName().toUpperCase().contains(searchText)
+                    || game.getName().toLowerCase().contains(searchText)
                     || game.getName().contains(searchText)) {
                 gameSearchList.add(game);
             }
@@ -69,6 +86,7 @@ public class CRUDList {
     public void sortByName() {
         Collections.sort(gameList);
     }
+
     public void sortByRevertName() {
         Collections.sort(gameList, new Comparator<Game>() {
             @Override
@@ -95,7 +113,8 @@ public class CRUDList {
             }
         });
     }
-    public void exportToFile(){
+
+    public void exportToFile() {
 
     }
 }

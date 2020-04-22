@@ -7,6 +7,7 @@ import code.HomeImage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URI;
 
 public class Screen extends JFrame {
     public static final int PLAYBUTTON_WIDTH = 180;
@@ -52,7 +53,8 @@ public class Screen extends JFrame {
     private JPanel spaceField;
     private JPanel screenshotTextField;
     private JPanel spaceField2;
-    private JButton sortButton;
+    private JMenuBar menuBar;
+    //    private JButton sortButton;
     private Object specifyJScrollPaneTemp;
     private DefaultListModel defaultListGameModel;
     private DefaultListModel defaultListGameSearchModel;
@@ -73,6 +75,7 @@ public class Screen extends JFrame {
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
+
 
         isSearching = false;
         crudList = new CRUDList();
@@ -113,20 +116,25 @@ public class Screen extends JFrame {
                     playButton.setPreferredSize(new Dimension(PLAYBUTTON_WIDTH, PLAYBUTTON_HEIGHT));
                     playButton.setIcon(new ImageIcon("image/playIcon.png"));
                     lastPlayed.setText("Last Played : " + selectedGame.getLastPlayed() + "        ");
-                    lastPlayed.setFont(new Font("Arial", Font.ITALIC, 20));
+                    lastPlayed.setFont(new Font("Arial", Font.PLAIN, 20));
                     playTime.setText("Play Time :" + " Hours            ");
-                    playTime.setFont(new Font("Arial", Font.ITALIC, 20));
+                    playTime.setFont(new Font("Arial", Font.PLAIN, 20));
                     gameScore.setText("             Game Score : " + selectedGame.getGameScore());
                     gameScore.setFont(new Font("Arial", Font.PLAIN, 20));
                     developer.setText("Developer: " + selectedGame.getDeveloper() + "       ");
                     developer.setFont(new Font("Arial", Font.PLAIN, 20));
                     homepage.setText("Homepage: " + selectedGame.getGameHomepage());
-                    homepage.setFont(new Font("Arial", Font.PLAIN, 20));
+
+                    if (selectedGame.getName().equals("") || selectedGame.getName() == null) {
+                        homepage.setVisible(false);
+                    } else {
+                        homepage.setFont(new Font("Roboto Light Italic", Font.PLAIN, 20));
+//                        homepage.setForeground(Color.red);
+                    }
 
                     description.setText(selectedGame.getDescription());
-                    description.setFont(new Font("Consolas", Font.ITALIC, 20));
+                    description.setFont(new Font("Consolas", Font.PLAIN, 20));
                     description.setForeground(Color.WHITE);
-
                     screenshotLabel.setText("SCREENSHOTS");
                     screenshotLabel.setFont(new Font("Arial", Font.BOLD, 25));
                     screenshotLabel.setForeground(Color.ORANGE);
@@ -145,6 +153,7 @@ public class Screen extends JFrame {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 isPressHomeButton = true;
                 homeImage = new HomeImage();
                 header.setIcon(new ImageIcon(homeImage.selectionImage()));
@@ -208,6 +217,29 @@ public class Screen extends JFrame {
         });
         gameSmallList.addMouseListener(new MouseAdapter() {
         });
+        quantityGames.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                searchTextField.setText("");
+                refreshGameList();
+            }
+        });
+        homepage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                Desktop desktop = java.awt.Desktop.getDesktop();
+                try {
+                    URI defaultURL = new URI("https://www.google.com/");
+                    URI homepageURL = new URI(selectedGame.getGameHomepage());
+                    desktop.browse(homepageURL);
+                } catch (Exception ex) {
+                    System.out.println("wrong URL");
+                    JOptionPane.showMessageDialog(null,"Wrong URL");
+                }
+            }
+        });
     }
 
     public CRUDList getCrudList() {
@@ -256,10 +288,12 @@ public class Screen extends JFrame {
         defaultListGameModel.removeAllElements();
         defaultListGameModel.clear();
         if (!isSearching) {
+            sortMenu.setEnabled(true);
             for (Game g : crudList.getGameList()) {
                 defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
             }
         } else {
+            sortMenu.setEnabled(false);
             for (Game g : crudList.getGameSearchList()) {
                 defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
             }
@@ -322,7 +356,11 @@ public class Screen extends JFrame {
                         "Do you really want to remove " + selectedGame.getName() + " ?",
                         "DELETE GAME", JOptionPane.WARNING_MESSAGE);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    crudList.deleteGame(gameIndex);
+                    if (!isSearching) {
+                        crudList.deleteGame(gameIndex);
+                    } else {
+                        crudList.deleteSearchGame(gameIndex);
+                    }
                     JOptionPane.showMessageDialog(null, "Deleted!");
                     homeButton.doClick();
                 }
