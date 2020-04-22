@@ -76,7 +76,6 @@ public class Screen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
 
-
         isSearching = false;
         crudList = new CRUDList();
         defaultListGameModel = new DefaultListModel<>();
@@ -236,8 +235,15 @@ public class Screen extends JFrame {
                     desktop.browse(homepageURL);
                 } catch (Exception ex) {
                     System.out.println("wrong URL");
-                    JOptionPane.showMessageDialog(null,"Wrong URL");
+                    JOptionPane.showMessageDialog(null, "Wrong URL");
                 }
+            }
+        });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddGameScreen addScreen = new AddGameScreen();
+//                addButton.setEnabled(false);
             }
         });
     }
@@ -381,10 +387,3 @@ public class Screen extends JFrame {
 
 }
 
-//        sortButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-////                NewClass nc = new NewClass();
-//
-//            }
-//        });
