@@ -21,8 +21,8 @@ public class Game implements Comparable<Game> {
     private ArrayList<String> gameLanguage;
     private ArrayList<String> genre;
     private int playTime;
-    private float gamePrice;
-    private float gameSize;
+    private String gamePrice;
+    private String gameSize;
     private String gameScore;
     private boolean isSteamGame;
     private boolean isValidateName;
@@ -83,7 +83,7 @@ public class Game implements Comparable<Game> {
         this.headerImage = "image/imgNotFoundHeader.png";
     }
 
-    private void setGameLanguage(String gameLanguage) {
+    public void setGameLanguage(String gameLanguage) {
         if (gameLanguage.contains(",")) {
             String[] tempGameLanguage = gameLanguage.trim().split(",");
             for (String language : tempGameLanguage) {
@@ -125,7 +125,7 @@ public class Game implements Comparable<Game> {
         return screenShot;
     }
 
-    private void setGameGenre(String gameGenre) {
+    public void setGameGenre(String gameGenre) {
         if (gameGenre.contains(",")) {
             String[] tempGameGenre = gameGenre.split(",");
             for (String genre : tempGameGenre) {
@@ -207,11 +207,11 @@ public class Game implements Comparable<Game> {
         }
     }
 
-    public float getGamePrice() {
+    public String getGamePrice() {
         return gamePrice;
     }
 
-    public void setGamePrice(float gamePrice) {
+    public void setGamePrice(String gamePrice) {
         this.gamePrice = gamePrice;
     }
 
@@ -223,11 +223,11 @@ public class Game implements Comparable<Game> {
         this.gameLocation = gameLocation;
     }
 
-    public float getGameSize() {
+    public String getGameSize() {
         return gameSize;
     }
 
-    public void setGameSize(float gameSize) {
+    public void setGameSize(String gameSize) {
         this.gameSize = gameSize;
     }
 
@@ -257,14 +257,6 @@ public class Game implements Comparable<Game> {
 
     public void setGameID(String gameID) {
         this.gameID = gameID;
-    }
-
-    public void setGameLanguage(ArrayList<String> gameLanguage) {
-        this.gameLanguage = gameLanguage;
-    }
-
-    public void setGenre(ArrayList<String> genre) {
-        this.genre = genre;
     }
 
     public boolean isSteamGame() {

@@ -243,7 +243,11 @@ public class Screen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddGameScreen addScreen = new AddGameScreen();
-//                addButton.setEnabled(false);
+                if (addScreen.isSave()) {
+
+                } else {
+
+                }
             }
         });
     }
