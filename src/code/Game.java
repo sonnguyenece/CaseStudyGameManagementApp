@@ -30,15 +30,15 @@ public class Game implements Comparable<Game> {
     private boolean isRunning;
 
     private static Pattern pattern;
-    private static final String STEAMGAMEID = "[0-9]+";
-    private static final String NONSTEAMGAMEID = "^[0-9a-zA-z].*";
-    private static final String GAMENAME_REGEX = "^[0-9a-zA-z].*";
-    private static final String GAMEIMAGEPATH_REGEX = "^[0-9a-zA-z].*";
+    private static final String STEAM_GAME_ID = "[0-9]+";
+    private static final String NON_STEAM_GAME_ID = "^[0-9a-zA-z].*";
+    private static final String GAME_NAME_REGEX = "^[0-9a-zA-z].*";
+    private static final String GAME_IMAGE_PATH_REGEX = "^[0-9a-zA-z].*";
 
     public Game() {
         this.gameLanguage = new ArrayList();
         this.genre = new ArrayList();
-        this.lastPlayed="Never Play Before";
+        this.lastPlayed = "No Data";
         isRunning = false;
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
@@ -49,7 +49,7 @@ public class Game implements Comparable<Game> {
 
     public Game(String name, Boolean isSteamGame, String gameID, String iconPath, String score) {
         setName(name);
-        this.lastPlayed="Never Play Before";
+        this.lastPlayed = "Never Play Before";
         this.iconPath = iconPath;
         setGameID(gameID, isSteamGame);
         this.isSteamGame = isSteamGame;
@@ -146,9 +146,8 @@ public class Game implements Comparable<Game> {
 
     public void setName(String name) {
         this.name = name;
-        isValidateName = Pattern.matches(GAMENAME_REGEX, name);
+        isValidateName = Pattern.matches(GAME_NAME_REGEX, name);
     }
-
 
     public String getDeveloper() {
         return developer;
@@ -169,10 +168,6 @@ public class Game implements Comparable<Game> {
     public String getScreenShotPath() {
         return screenShotPath;
     }
-
-//    public void setScreenShotPath(String screenShotPath) {
-//        this.screenShotPath = screenShotPath;
-//    }
 
     public int getPlayTime() {
         return playTime;
@@ -206,9 +201,9 @@ public class Game implements Comparable<Game> {
         this.gameID = gameID;
         this.isSteamGame = isSteamGame;
         if (this.isSteamGame) {
-            isValidateID = Pattern.matches(STEAMGAMEID, gameID);
+            isValidateID = Pattern.matches(STEAM_GAME_ID, gameID);
         } else {
-            isValidateID = Pattern.matches(NONSTEAMGAMEID, gameID);
+            isValidateID = Pattern.matches(NON_STEAM_GAME_ID, gameID);
         }
     }
 
@@ -219,7 +214,6 @@ public class Game implements Comparable<Game> {
     public void setGamePrice(float gamePrice) {
         this.gamePrice = gamePrice;
     }
-
 
     public String getGameLocation() {
         return gameLocation;
@@ -264,10 +258,6 @@ public class Game implements Comparable<Game> {
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
-
-//    public void setGameImage(ArrayList<String> gameImage) {
-//        this.gameImage = gameImage;
-//    }
 
     public void setGameLanguage(ArrayList<String> gameLanguage) {
         this.gameLanguage = gameLanguage;
@@ -327,10 +317,10 @@ public class Game implements Comparable<Game> {
     }
 
     public void toStringLastPlay() {
-        long yourmilliseconds = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
-        Date resultdate = new Date(yourmilliseconds);
-        this.lastPlayed = sdf.format(resultdate);
+        long currentTimeMs = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date resultDate = new Date(currentTimeMs);
+        this.lastPlayed = sdf.format(resultDate);
     }
 
     public void playSteamGame() throws Exception {
@@ -367,15 +357,4 @@ public class Game implements Comparable<Game> {
         return this.getName().compareTo(game.getName());
     }
 
-
-//    public static void main(String[] args) throws Exception {
-//        Game halfLife = new Game("Half Life 2", true, "220","image/Game Datas/HalfLife2/image/icon.png");
-//        halfLife.playGame();
-//        System.out.println(halfLife.isRunning);
-//
-//        Game supertux2 = new Game("supertux 2", false, "supertux2","image/Game Datas/Supertux2/image/icon.jpg");
-//        supertux2.playGame();
-//        System.out.println(supertux2.isRunning);
-
-//    }
 }

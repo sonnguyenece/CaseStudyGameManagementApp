@@ -5,11 +5,8 @@ import code.Game;
 import code.HomeImage;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Screen extends JFrame {
     public static final int PLAYBUTTON_WIDTH = 180;
@@ -43,34 +40,71 @@ public class Screen extends JFrame {
     private JPanel timePlayPanel;
     private JLabel screenshotLabel;
     private JScrollPane specifyJScrollPane;
+    private JMenu sortMenu;
+    private JMenu filterMenu;
+    private JMenuItem sortFromLow;
+    private JMenuItem sortFromHigh;
+    private JMenuItem sortz_a;
+    private JMenuItem sorta_z;
+    private JPanel descriptionPanel;
+    private JPanel screenshotText;
+    private JPanel screenshotField;
+    private JPanel spaceField;
+    private JPanel screenshotTextField;
+    private JPanel spaceField2;
+    private JButton sortButton;
     private Object specifyJScrollPaneTemp;
     private DefaultListModel defaultListGameModel;
     private DefaultListModel defaultListGameSearchModel;
-    public CRUDList crudList;
+    private CRUDList crudList;
     private Game selectedGame;
     private boolean isPressHomeButton;
     private HomeImage homeImage;
-
+    final JPopupMenu popupMenu = new JPopupMenu();
+    private final JMenuItem play = new JMenuItem("Play");
+    private final JMenuItem showInfo = new JMenuItem("Show");
+    private final JMenuItem edit = new JMenuItem("Edit");
+    private final JMenuItem delete = new JMenuItem("Delete");
+    private int gameIndex;
+    private boolean isSearching;
 
     public Screen() {
         super("GAME MANAGEMENT");
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
+
+        isSearching = false;
+        crudList = new CRUDList();
+        defaultListGameModel = new DefaultListModel<>();
         specifyJpanel.setVisible(false);
         isPressHomeButton = false;
-        defaultListGameModel = new DefaultListModel<>();
-        gameSmallList.setModel(defaultListGameModel);
-        gameSmallList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                int gameIndex = gameSmallList.getSelectedIndex();
-                if (gameIndex >= 0) {
-                    isPressHomeButton = false;
-                    specifyJpanel.setVisible(true);
-                    specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-                    selectedGame = crudList.getGameList().get(gameIndex);
+        gameSmallList.setModel(defaultListGameModel);
+//        gameSmallList.addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+
+        gameSmallList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (SwingUtilities.isRightMouseButton(me)    // if right mouse button clicked
+                        && !gameSmallList.isSelectionEmpty()            // and list selection is not empty
+                        && gameSmallList.locationToIndex(me.getPoint()) // and clicked point is
+                        == gameSmallList.getSelectedIndex()) {       //   inside selected item bounds
+                    popupMenu.show(gameSmallList, me.getX(), me.getY());
+                }
+
+                if (gameIndex >= 0) {
+
+                    isPressHomeButton = false;
+                    displayRightScreen(true);
+                    gameIndex = gameSmallList.getSelectedIndex();
+                    if (!isSearching) {
+                        selectedGame = crudList.getGameList().get(gameIndex);
+                    } else {
+//                        gameIndex = gameSearchList.getSelectedIndex();
+                        selectedGame = crudList.getGameSearchList().get(gameIndex);
+                    }
 
                     headerPanel.setPreferredSize(new Dimension(1100, 400));
                     header.setIcon(new ImageIcon(selectedGame.getHeaderImage()));
@@ -105,6 +139,9 @@ public class Screen extends JFrame {
 
             }
         });
+
+        popUpListener();
+
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -112,9 +149,11 @@ public class Screen extends JFrame {
                 homeImage = new HomeImage();
                 header.setIcon(new ImageIcon(homeImage.selectionImage()));
 
+                displayRightScreen(false);
+
                 specifyJpanel.setVisible(true);
 
-                specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+//                specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
                 searchTextField.setText("");
                 refreshGameList();
@@ -131,7 +170,6 @@ public class Screen extends JFrame {
             }
         });
 
-
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,18 +178,48 @@ public class Screen extends JFrame {
 
             }
         });
-
-    }
-
-    private void createUIComponents() {
-        searchIcon = new JLabel(new ImageIcon("image/searchIcon.png"));
-        searchButton = new JButton(new ImageIcon("image/filter.png"));
-        homeButton = new JButton(new ImageIcon("image/homeIcon.png"));
-        addButton = new JButton(new ImageIcon("image/addIcon.png"));
+        sorta_z.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crudList.sortByName();
+                refreshGameList();
+            }
+        });
+        sortz_a.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crudList.sortByRevertName();
+                refreshGameList();
+            }
+        });
+        sortFromHigh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crudList.sortFromHighestScore();
+                refreshGameList();
+            }
+        });
+        sortFromLow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crudList.sortFromLowestScore();
+                refreshGameList();
+            }
+        });
+        gameSmallList.addMouseListener(new MouseAdapter() {
+        });
     }
 
     public CRUDList getCrudList() {
         return crudList;
+    }
+
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
     }
 
     public void setCrudList(CRUDList crudList) {
@@ -166,10 +234,28 @@ public class Screen extends JFrame {
         isPressHomeButton = pressHomeButton;
     }
 
+    public void displayRightScreen(Boolean b) {
+        spaceField.setVisible(b);
+        descriptionPanel.setVisible(b);
+        infoPanel.setVisible(b);
+        screenshotTextField.setVisible(b);
+        screenshotField.setVisible(b);
+        spaceField2.setVisible(b);
+    }
+
+    public void createUIComponents() {
+        searchIcon = new JLabel(new ImageIcon("image/searchIcon.png"));
+        searchButton = new JButton(new ImageIcon("image/filterMenu.png"));
+        homeButton = new JButton(new ImageIcon("image/homeIcon.png"));
+        addButton = new JButton(new ImageIcon("image/addIcon.png"));
+    }
+
     public void refreshGameList() {
+        if (searchTextField.getText().equals("")) isSearching = false;
+        else isSearching = true;
         defaultListGameModel.removeAllElements();
         defaultListGameModel.clear();
-        if (searchTextField.getText().equals("")) {
+        if (!isSearching) {
             for (Game g : crudList.getGameList()) {
                 defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
             }
@@ -180,7 +266,7 @@ public class Screen extends JFrame {
         }
         gameSmallList.setCellRenderer(new Renderer());
         gameSmallList.setModel(defaultListGameModel);
-        quantityGames.setText("GAMES (" + crudList.getGameList().size() + ")");
+        quantityGames.setText("ALL GAMES (" + crudList.getGameList().size() + ")");
 
 //        if (this.isPressHomeButton()) {
 //            long startTime = System.currentTimeMillis() / 1000;
@@ -201,4 +287,66 @@ public class Screen extends JFrame {
         homeButton.doClick();
     }
 
+    private void popUpListener() {
+
+        popupMenu.add(play);
+        popupMenu.add(showInfo);
+        popupMenu.add(edit);
+        popupMenu.add(delete);
+
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(null, "Preparing to launch " + selectedGame.getName() + "... ");
+                selectedGame.playGame();
+                selectedGame.toStringLastPlay();
+            }
+        });
+        showInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Showed ");
+            }
+        });
+        edit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Edited ");
+            }
+        });
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
+                        "Do you really want to remove " + selectedGame.getName() + " ?",
+                        "DELETE GAME", JOptionPane.WARNING_MESSAGE);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    crudList.deleteGame(gameIndex);
+                    JOptionPane.showMessageDialog(null, "Deleted!");
+                    homeButton.doClick();
+                }
+            }
+        });
+    }
+
+    private void gameSmallListMouseClicked(java.awt.event.MouseEvent evt) {
+        gameSmallList.setSelectedIndex(gameSmallList.locationToIndex(evt.getPoint()));
+        if (SwingUtilities.isRightMouseButton(evt)
+                && gameSmallList.locationToIndex(evt.getPoint())
+                == gameSmallList.getSelectedIndex()) {
+            if (!gameSmallList.isSelectionEmpty()) {
+                popupMenu.show(gameSmallList, evt.getX(), evt.getY());
+            }
+        }
+    }
+
 }
+
+//        sortButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+////                NewClass nc = new NewClass();
+//
+//            }
+//        });

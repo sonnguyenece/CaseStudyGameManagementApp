@@ -30,7 +30,7 @@ public class Main {
                 "image/Game Datas/HalfLife2/image/screenshot2.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot1.jpg");
 
-        screen.crudList = new CRUDList();
+//        screen.getCrudList() = new CRUDList();
         screen.getCrudList().addGame(supertux2);
         screen.getCrudList().addGame(halfLife);
         screen.getCrudList().addGame(left4Dead);

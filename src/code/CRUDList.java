@@ -69,6 +69,14 @@ public class CRUDList {
     public void sortByName() {
         Collections.sort(gameList);
     }
+    public void sortByRevertName() {
+        Collections.sort(gameList, new Comparator<Game>() {
+            @Override
+            public int compare(Game game, Game g) {
+                return -game.getName().compareTo(g.getName());
+            }
+        });
+    }
 
     public void sortFromLowestScore() {
         Collections.sort(gameList, new Comparator<Game>() {
