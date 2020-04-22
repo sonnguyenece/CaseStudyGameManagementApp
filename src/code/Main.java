@@ -39,5 +39,7 @@ public class Main {
 //        screen.getCrudList().sortFromHighestScore();
         screen.refreshGameList();
         screen.autoClickHomeFirst();
+
+
     }
 }

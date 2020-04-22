@@ -1,7 +1,9 @@
 package code;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Game implements Comparable<Game> {
@@ -36,17 +38,18 @@ public class Game implements Comparable<Game> {
     public Game() {
         this.gameLanguage = new ArrayList();
         this.genre = new ArrayList();
-//        this.gameImage = new ArrayList();
+        this.lastPlayed="Never Play Before";
         isRunning = false;
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
-        this.headerImage="image/imgNotFoundHeader.png";
+        this.headerImage = "image/imgNotFoundHeader.png";
     }
 
     public Game(String name, Boolean isSteamGame, String gameID, String iconPath, String score) {
         setName(name);
+        this.lastPlayed="Never Play Before";
         this.iconPath = iconPath;
         setGameID(gameID, isSteamGame);
         this.isSteamGame = isSteamGame;
@@ -55,7 +58,7 @@ public class Game implements Comparable<Game> {
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
         this.screenShot.add("image/imgNotFound.png");
-        this.headerImage="image/imgNotFoundHeader.png";
+        this.headerImage = "image/imgNotFoundHeader.png";
     }
 
     public Game(String name, String developer, String iconPath, String screenShotPath, String description,
@@ -77,7 +80,7 @@ public class Game implements Comparable<Game> {
         setGameLanguage(gameLanguage);
         setGameGenre(gameGenre);
         setScreenShot(gameImage);
-        this.headerImage="image/imgNotFoundHeader.png";
+        this.headerImage = "image/imgNotFoundHeader.png";
     }
 
     private void setGameLanguage(String gameLanguage) {
@@ -180,7 +183,7 @@ public class Game implements Comparable<Game> {
     }
 
     public String getLastPlayed() {
-        return lastPlayed;
+        return this.lastPlayed;
     }
 
     public void setLastPlayed(String lastPlayed) {
@@ -305,6 +308,7 @@ public class Game implements Comparable<Game> {
     public void setRunning(boolean running) {
         isRunning = running;
     }
+
     public void playGame() {
         try {
             if (this.isSteamGame) {
@@ -314,10 +318,19 @@ public class Game implements Comparable<Game> {
                 if (this.isValidateID && this.isValidateName) playNonSteamGame();
                 else this.isRunning = false;
             }
+            toStringLastPlay();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    public void toStringLastPlay() {
+        long yourmilliseconds = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy");
+        Date resultdate = new Date(yourmilliseconds);
+        this.lastPlayed = sdf.format(resultdate);
     }
 
     public void playSteamGame() throws Exception {

@@ -49,6 +49,7 @@ public class Screen extends JFrame {
     public CRUDList crudList;
     private Game selectedGame;
     private boolean isPressHomeButton;
+    private HomeImage homeImage;
 
 
     public Screen() {
@@ -57,27 +58,27 @@ public class Screen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         specifyJpanel.setVisible(false);
-
+        isPressHomeButton = false;
         defaultListGameModel = new DefaultListModel<>();
         gameSmallList.setModel(defaultListGameModel);
         gameSmallList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-
                 int gameIndex = gameSmallList.getSelectedIndex();
                 if (gameIndex >= 0) {
+                    isPressHomeButton = false;
                     specifyJpanel.setVisible(true);
                     specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
                     selectedGame = crudList.getGameList().get(gameIndex);
 
                     headerPanel.setPreferredSize(new Dimension(1100, 400));
                     header.setIcon(new ImageIcon(selectedGame.getHeaderImage()));
-
                     infoPanel.setPreferredSize(new Dimension(10, 10));
                     timePlayPanel.setPreferredSize(new Dimension(50, 50));
                     playButton.setPreferredSize(new Dimension(PLAYBUTTON_WIDTH, PLAYBUTTON_HEIGHT));
                     playButton.setIcon(new ImageIcon("image/playIcon.png"));
-                    lastPlayed.setText("Last Played : " + " dd/mm/yyyy         ");
+                    lastPlayed.setText("Last Played : " + selectedGame.getLastPlayed() + "        ");
                     lastPlayed.setFont(new Font("Arial", Font.ITALIC, 20));
                     playTime.setText("Play Time :" + " Hours            ");
                     playTime.setFont(new Font("Arial", Font.ITALIC, 20));
@@ -107,16 +108,11 @@ public class Screen extends JFrame {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                HomeImage homeImage = new HomeImage();
+                isPressHomeButton = true;
+                homeImage = new HomeImage();
                 header.setIcon(new ImageIcon(homeImage.selectionImage()));
-//                long startTime = System.currentTimeMillis() / 1000;
-//                long endTime = startTime + 3;
-                specifyJpanel.setVisible(true);
 
-//                if (startTime >= endTime) {
-//                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
-//                    endTime = startTime + 3;
-//                }
+                specifyJpanel.setVisible(true);
 
                 specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -140,6 +136,8 @@ public class Screen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedGame.playGame();
+                selectedGame.toStringLastPlay();
+
             }
         });
 
@@ -160,6 +158,14 @@ public class Screen extends JFrame {
         this.crudList = crudList;
     }
 
+    public boolean isPressHomeButton() {
+        return isPressHomeButton;
+    }
+
+    public void setPressHomeButton(boolean pressHomeButton) {
+        isPressHomeButton = pressHomeButton;
+    }
+
     public void refreshGameList() {
         defaultListGameModel.removeAllElements();
         defaultListGameModel.clear();
@@ -175,6 +181,19 @@ public class Screen extends JFrame {
         gameSmallList.setCellRenderer(new Renderer());
         gameSmallList.setModel(defaultListGameModel);
         quantityGames.setText("GAMES (" + crudList.getGameList().size() + ")");
+
+//        if (this.isPressHomeButton()) {
+//            long startTime = System.currentTimeMillis() / 1000;
+//            long endTime = startTime + 3;
+//            while (this.isPressHomeButton()) {
+//                if (startTime < endTime)
+//                    startTime = System.currentTimeMillis() / 1000;
+//                else {
+//                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
+//                    endTime = System.currentTimeMillis() / 1000 + 3;
+//                }
+//            }
+//        }
 
     }
 
