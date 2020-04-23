@@ -16,3 +16,8 @@ homepage: http://www.l4d.com/
 
 metacritic score : 8,9
 
+icon path : image/Game Datas/Left4Dead 2/image/icon.jpg
+
+headerIMGPath : image/Game Datas/Left4Dead 2/image/header.jpg
+
+screenshot : image/Game Datas/Left4Dead 2/image/screenshot1.jpg,image/Game Datas/Left4Dead 2/image/screenshot2.jpeg

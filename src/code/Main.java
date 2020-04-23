@@ -28,7 +28,7 @@ public class Main {
         halfLife.setScreenShot("image/Game Datas/HalfLife2/image/screenshot4.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot3.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot2.jpg," +
-                "image/Game Datas/HalfLife2/image/screenshot1.jpg");
+                "image/Game Datas/HalfLife2/image/screenshot1.jpg,");
 
 //        screen.getCrudList() = new CRUDList();
         screen.getCrudList().addGame(supertux2);
@@ -39,7 +39,5 @@ public class Main {
 //        screen.getCrudList().sortFromHighestScore();
         screen.refreshGameList();
         screen.autoClickHomeFirst();
-
-
     }
 }

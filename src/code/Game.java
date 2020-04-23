@@ -1,5 +1,9 @@
 package code;
 
+import com.sun.source.tree.TryTree;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,8 +22,8 @@ public class Game implements Comparable<Game> {
     private String gameHomepage;
     private String headerImage;
     private ArrayList<String> screenShot = new ArrayList();
-    private ArrayList<String> gameLanguage;
-    private ArrayList<String> genre;
+    private ArrayList<String> gameLanguage = new ArrayList();
+    private ArrayList<String> genre = new ArrayList();
     private int playTime;
     private String gamePrice;
     private String gameSize;
@@ -36,62 +40,81 @@ public class Game implements Comparable<Game> {
     private static final String GAME_IMAGE_PATH_REGEX = "^[0-9a-zA-z].*";
 
     public Game() {
-        this.gameLanguage = new ArrayList();
-        this.genre = new ArrayList();
-        this.lastPlayed = "No Data";
-        isRunning = false;
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
-        this.headerImage = "image/imgNotFoundHeader.png";
+
+        initParameter();
     }
 
-    public Game(String name, Boolean isSteamGame, String gameID, String iconPath, String score) {
+
+    public Game(String name, Boolean isSteamGame, String gameID,
+                String iconPath, String score) {
         setName(name);
         this.lastPlayed = "Never Play Before";
         this.iconPath = iconPath;
         setGameID(gameID, isSteamGame);
         this.isSteamGame = isSteamGame;
         this.gameScore = score;
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
-        this.screenShot.add("image/imgNotFound.png");
         this.headerImage = "image/imgNotFoundHeader.png";
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
     }
 
-    public Game(String name, String developer, String iconPath, String screenShotPath, String description,
-                String gameID, String gameImage, int playTime, String lastPlayed, String gameLanguage,
-                String gameGenre, String gameScore, String gameHomepage, boolean isSteamGame) {
+    public Game(String name, String developer, String iconPath, String screenShotPath,
+                String description, String gameID, String headerImage,
+                String gameLanguage, String gameGenre, String gameScore,
+                String homepage, boolean isSteamGame) {
+        initParameter();
         setName(name);
+        try {
+            if (developer == null || developer.equals(" ")) developer = "Not Update";
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Developer no input!");
+        } finally {
+            developer = "Not Update";
+        }
         this.developer = developer;
         this.iconPath = iconPath;
-        this.screenShotPath = screenShotPath;
-        this.playTime = playTime;
-        this.lastPlayed = lastPlayed;
-        this.description = description;
+//        this.screenShotPath = screenShotPath;
+        this.headerImage = headerImage;
+        this.description ="<html>"+ description + "</html>";
         setGameID(gameID, isSteamGame);
-        this.gamePrice = gamePrice;
-//        this.gameLocation = gameLocationPath;
-        this.gameScore = gameScore;
-        this.gameHomepage = gameHomepage;
+
+        if (gameScore == null || gameScore.equals(" ")) {
+            this.gameScore = "No Score";
+        } else setGameScore(gameScore);
+
+        try {
+            if (homepage.equals(null) || homepage.equals(" ")) homepage = "No Data";
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Homepage no input!");
+        } finally {
+            homepage = "No Data";
+        }
+
+        this.gameHomepage = homepage;
         this.isSteamGame = isSteamGame;
         setGameLanguage(gameLanguage);
         setGameGenre(gameGenre);
-        setScreenShot(gameImage);
-        this.headerImage = "image/imgNotFoundHeader.png";
+        setScreenShot(screenShotPath);
+
+
     }
 
-    public void setGameLanguage(String gameLanguage) {
+    public void setGameLanguage(String gameLanguage) throws NullPointerException {
         if (gameLanguage.contains(",")) {
             String[] tempGameLanguage = gameLanguage.trim().split(",");
             for (String language : tempGameLanguage) {
                 this.gameLanguage.add(language.trim());
             }
         } else if (!gameLanguage.contains(" ")) {
-            this.gameLanguage.add(gameLanguage);
+            try {
+                this.gameLanguage.add(gameLanguage);
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "Wrong language input");
+            }
         }
+//        this.gameLanguage.add(gameLanguage);
     }
 
     public ArrayList<String> getGameLanguage() {
@@ -103,7 +126,6 @@ public class Game implements Comparable<Game> {
     }
 
     public void setHeaderImage(String headerImage) {
-
         this.headerImage = headerImage;
     }
 
@@ -132,7 +154,11 @@ public class Game implements Comparable<Game> {
                 this.genre.add(genre.trim());
             }
         } else if (!gameGenre.contains(" ")) {
-            this.genre.add(gameGenre);
+            try {
+                this.genre.add(gameGenre);
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "Wrong genre input!");
+            }
         }
     }
 
@@ -236,7 +262,14 @@ public class Game implements Comparable<Game> {
     }
 
     public void setGameScore(String gameScore) {
-        this.gameScore = gameScore;
+        try {
+            float score = Float.parseFloat(gameScore);
+            if (score <= 10 && score > 0)
+                this.gameScore = gameScore;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Score input!!!");
+            this.gameScore = "No Score";
+        }
     }
 
     public String getGameHomepage() {
@@ -289,6 +322,21 @@ public class Game implements Comparable<Game> {
 
     public void setRunning(boolean running) {
         isRunning = running;
+    }
+
+    public void initParameter() {
+        isRunning = false;
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.screenShot.add("image/imgNotFound.png");
+        this.headerImage = "image/imgNotFoundHeader.png";
+        this.name = "";
+        this.gameID = "";
+        this.developer = "No Data";
+        this.lastPlayed = "No Data";
+        this.gameSize = "No Data";
+        this.gamePrice = "No Data";
     }
 
     public void playGame() {

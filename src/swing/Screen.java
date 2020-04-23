@@ -83,9 +83,6 @@ public class Screen extends JFrame {
         isPressHomeButton = false;
 
         gameSmallList.setModel(defaultListGameModel);
-//        gameSmallList.addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent listSelectionEvent) {
 
         gameSmallList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
@@ -123,21 +120,13 @@ public class Screen extends JFrame {
                     developer.setText("Developer: " + selectedGame.getDeveloper() + "       ");
                     developer.setFont(new Font("Arial", Font.PLAIN, 20));
                     homepage.setText("Homepage: " + selectedGame.getGameHomepage());
-
-                    if (selectedGame.getName().equals("") || selectedGame.getName() == null) {
-                        homepage.setVisible(false);
-                    } else {
-                        homepage.setFont(new Font("Roboto Light Italic", Font.PLAIN, 20));
-//                        homepage.setForeground(Color.red);
-                    }
-
+                    homepage.setFont(new Font("Roboto Light Italic", Font.PLAIN, 20));
                     description.setText(selectedGame.getDescription());
                     description.setFont(new Font("Consolas", Font.PLAIN, 20));
                     description.setForeground(Color.WHITE);
                     screenshotLabel.setText("SCREENSHOTS");
                     screenshotLabel.setFont(new Font("Arial", Font.BOLD, 25));
                     screenshotLabel.setForeground(Color.ORANGE);
-
                     screenshot1.setIcon(new ImageIcon(selectedGame.getScreenShot().get(0)));
                     screenshot2.setIcon(new ImageIcon(selectedGame.getScreenShot().get(1)));
                     screenshot3.setIcon(new ImageIcon(selectedGame.getScreenShot().get(2)));
@@ -235,19 +224,19 @@ public class Screen extends JFrame {
                     desktop.browse(homepageURL);
                 } catch (Exception ex) {
                     System.out.println("wrong URL");
-                    JOptionPane.showMessageDialog(null, "Wrong URL");
+                    JOptionPane.showMessageDialog(null,
+                            "Can not access this URL");
                 }
             }
         });
+
+        Screen scn = this;
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddGameScreen addScreen = new AddGameScreen();
-                if (addScreen.isSave()) {
-
-                } else {
-
-                }
+                AddGameScreen addScreen = new AddGameScreen(scn, rootPaneCheckingEnabled);
+                addScreen.setVisible(true);
             }
         });
     }
