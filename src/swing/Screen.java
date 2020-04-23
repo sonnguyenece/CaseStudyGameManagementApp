@@ -237,6 +237,8 @@ public class Screen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 AddGameScreen addScreen = new AddGameScreen(scn, rootPaneCheckingEnabled);
                 addScreen.setVisible(true);
+                addScreen.setAlwaysOnTop(true);
+                scn.setEnabled(false);
             }
         });
     }

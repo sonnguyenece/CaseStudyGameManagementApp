@@ -158,6 +158,7 @@ public class AddGameScreen extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 isSave = false;
                 dispose();
+                screen.setEnabled(true);
             }
         });
         OKButton.addActionListener(new ActionListener() {
@@ -175,6 +176,7 @@ public class AddGameScreen extends JDialog {
                     JOptionPane.showMessageDialog(null, "Added");
                     screen.refreshGameList();
                     dispose();
+                    screen.setEnabled(true);
                 }
             }
         });
