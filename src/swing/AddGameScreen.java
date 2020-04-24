@@ -40,26 +40,31 @@ public class AddGameScreen extends JDialog {
     private String gameDeveloper;
     private Game game;
     private boolean isSave;
-    private final ButtonGroup radioGroup = new ButtonGroup();
+    private ButtonGroup radioGroup;
     private Screen screen;
+    private String steamGameSelected;
 
     AddGameScreen(Frame parent, boolean modal) {
         setTitle("ADD GAME");
-        setSize(1000, 700);
+        getPreferredSize();
+        setSize(800, 700);
         setLocation(280, 50);
         this.setContentPane(mainPanel);
         this.pack();
         initInitialVar();
         screen = (Screen) parent;
-
+        radioGroup = new ButtonGroup();
         radioGroup.add(yesRadioButton);
         radioGroup.add(noRadioButton);
+        AddGameScreen gameScr = this;
+        yesRadioButton.setActionCommand("not selected");
+        screen.setEnabled(false);
+        /*----------------------Action Listener----------------------*/
         nameTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
                 gameName = nameTextField.getText();
-//                game.setName(nameTextField.getText());
             }
         });
         gameIDTextField.addKeyListener(new KeyAdapter() {
@@ -73,22 +78,22 @@ public class AddGameScreen extends JDialog {
         yesRadioButton.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-//                isSteamGame = true;
-                game.setSteamGame(true);
+                isSteamGame = true;
+                yesRadioButton.setActionCommand("Yes");
             }
         });
         noRadioButton.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-//                isSteamGame = false;
-                game.setSteamGame(false);
+                isSteamGame = false;
+                yesRadioButton.setActionCommand("No");
             }
         });
         scoreTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setGameScore(scoreTextField.getText());
+                if (!scoreTextField.getText().equals(""))
                 gameScore = scoreTextField.getText();
             }
         });
@@ -153,6 +158,7 @@ public class AddGameScreen extends JDialog {
                 gameDescription = descriptionTextField.getText();
             }
         });
+
         CANCELButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,22 +167,42 @@ public class AddGameScreen extends JDialog {
                 screen.setEnabled(true);
             }
         });
+
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                if (gameName.equals("") || gameID.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Wrong Input!");
+                steamGameSelected = yesRadioButton.getActionCommand();
+                if (gameName.equals("") || gameID.equals("") ||
+                        steamGameSelected.equals("not selected")) {
+                    gameScr.setVisible(false);
+                    JOptionPane.showMessageDialog(null,
+                            "Wrong Input!", "Warning",
+                            JOptionPane.PLAIN_MESSAGE);
+                    gameScr.setVisible(true);
                 } else {
-//                    isSave = true;
-                    game = new Game(gameName, gameDeveloper, gameIcon, gameScreenshots,
-                            gameDescription, gameID, gameHeader,
-                            gameLanguage, gameGenre, gameScore, gameHomepage, isSteamGame);
-                    screen.getCrudList().addGame(game);
-                    JOptionPane.showMessageDialog(null, "Added");
-                    screen.refreshGameList();
-                    dispose();
-                    screen.setEnabled(true);
+                    game = new Game(gameName, gameDeveloper, gameIcon,
+                            gameScreenshots, gameDescription, gameID,
+                            gameHeader, gameLanguage, gameGenre,
+                            gameScore, gameHomepage, isSteamGame);
+                    boolean gameAdded = screen.getCrudList().addGame(game);
+                    if (gameAdded) {
+                        screen.getCrudList().sortByName();
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Added");
+                        gameScr.setVisible(true);
+                        screen.refreshGameList();
+                        dispose();
+                        screen.setEnabled(true);
+                    } else if (!game.isGameScore()) {
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Score Input!!!");
+                        System.out.println("Wrong score input!");
+                        gameScr.setVisible(true);
+                    } else {
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Game ID exist!");
+                        gameScr.setVisible(true);
+                    }
                 }
             }
         });
@@ -194,7 +220,7 @@ public class AddGameScreen extends JDialog {
     private void initInitialVar() {
         gameName = "";
         gameID = "";
-        gameScore = "";
+        gameScore = "No Score";
         gameGenre = "";
         gameLanguage = "";
         gameSize = "";
@@ -205,8 +231,5 @@ public class AddGameScreen extends JDialog {
         gameDescription = "";
         game = new Game();
         isSave = false;
-        noRadioButton.setSelected(true);
     }
-
-
 }

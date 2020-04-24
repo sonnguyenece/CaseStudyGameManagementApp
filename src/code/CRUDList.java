@@ -43,12 +43,29 @@ public class CRUDList {
         this.quantityGames = quantityGames;
     }
 
-    public void addGame(Game game) {
-        this.gameList.add(game);
-        this.quantityGames++;
+    public boolean addGame(Game game) {
+        for (Game g :
+                this.gameList) {
+            if (game.getGameID().equals(g.getGameID())) {
+                return false;
+            }
+        }
+        if (game.isGameScore()) {
+            this.gameList.add(game);
+            this.quantityGames++;
+            return true;
+        }
+        return false;
     }
 
     public void editGame(int index) {
+
+    }
+
+    public void editSearchGame(int index) {
+        delGameInGamelistBySearch(index);
+//        gameSearchList.remove(index);
+//        quantityGames--;
     }
 
     public void deleteGame(int index) {

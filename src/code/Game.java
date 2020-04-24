@@ -5,12 +5,13 @@ import com.sun.source.tree.TryTree;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class Game implements Comparable<Game> {
+public class Game implements Comparable<Game>, Serializable {
     private String name;
     private String developer;
     private String iconPath;
@@ -22,8 +23,9 @@ public class Game implements Comparable<Game> {
     private String gameHomepage;
     private String headerImage;
     private ArrayList<String> screenShot = new ArrayList();
-    private ArrayList<String> gameLanguage = new ArrayList();
-    private ArrayList<String> genre = new ArrayList();
+    //    private String[]screenShot;
+    private String gameLanguage;
+    private String gameGenre;
     private int playTime;
     private String gamePrice;
     private String gameSize;
@@ -32,15 +34,15 @@ public class Game implements Comparable<Game> {
     private boolean isValidateName;
     private boolean isValidateID;
     private boolean isRunning;
-
+    private boolean isGameScore;
     private static Pattern pattern;
     private static final String STEAM_GAME_ID = "[0-9]+";
     private static final String NON_STEAM_GAME_ID = "^[0-9a-zA-z].*";
     private static final String GAME_NAME_REGEX = "^[0-9a-zA-z].*";
     private static final String GAME_IMAGE_PATH_REGEX = "^[0-9a-zA-z].*";
 
-    public Game() {
 
+    public Game() {
         initParameter();
     }
 
@@ -70,14 +72,12 @@ public class Game implements Comparable<Game> {
             if (developer == null || developer.equals(" ")) developer = "Not Update";
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Developer no input!");
-        } finally {
-            developer = "Not Update";
         }
         this.developer = developer;
         this.iconPath = iconPath;
-//        this.screenShotPath = screenShotPath;
+
         this.headerImage = headerImage;
-        this.description ="<html>"+ description + "</html>";
+        this.description = description;
         setGameID(gameID, isSteamGame);
 
         if (gameScore == null || gameScore.equals(" ")) {
@@ -85,40 +85,33 @@ public class Game implements Comparable<Game> {
         } else setGameScore(gameScore);
 
         try {
-            if (homepage.equals(null) || homepage.equals(" ")) homepage = "No Data";
+            if (homepage.equals(null) || homepage.equals(" ")) homepage = "";
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Homepage no input!");
-        } finally {
-            homepage = "No Data";
         }
 
         this.gameHomepage = homepage;
         this.isSteamGame = isSteamGame;
-        setGameLanguage(gameLanguage);
-        setGameGenre(gameGenre);
-        setScreenShot(screenShotPath);
-
-
+        this.gameLanguage = gameLanguage;
+        this.setScreenShot(screenShotPath);
     }
 
-    public void setGameLanguage(String gameLanguage) throws NullPointerException {
-        if (gameLanguage.contains(",")) {
-            String[] tempGameLanguage = gameLanguage.trim().split(",");
-            for (String language : tempGameLanguage) {
-                this.gameLanguage.add(language.trim());
-            }
-        } else if (!gameLanguage.contains(" ")) {
-            try {
-                this.gameLanguage.add(gameLanguage);
-            } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(null, "Wrong language input");
-            }
-        }
 //        this.gameLanguage.add(gameLanguage);
+
+    public String getGameLanguage() {
+        return gameLanguage;
     }
 
-    public ArrayList<String> getGameLanguage() {
-        return gameLanguage;
+    public String getStringLanguage() {
+        return this.gameLanguage;
+    }
+
+    public String getStringScreenshots() {
+        String temp = "";
+        for (int i = 0; i < getScreenShot().size(); i++) {
+            temp += getScreenShot().get(i) + ",";
+        }
+        return temp;
     }
 
     public String getHeaderImage() {
@@ -138,7 +131,7 @@ public class Game implements Comparable<Game> {
         if (gameImagePath.contains(",")) {
             String[] tempgameImage = gameImagePath.trim().split(",");
             for (String image : tempgameImage) {
-                this.screenShot.add(0, (image.trim()));
+                this.screenShot.add((image.trim()));
             }
         }
     }
@@ -148,22 +141,11 @@ public class Game implements Comparable<Game> {
     }
 
     public void setGameGenre(String gameGenre) {
-        if (gameGenre.contains(",")) {
-            String[] tempGameGenre = gameGenre.split(",");
-            for (String genre : tempGameGenre) {
-                this.genre.add(genre.trim());
-            }
-        } else if (!gameGenre.contains(" ")) {
-            try {
-                this.genre.add(gameGenre);
-            } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(null, "Wrong genre input!");
-            }
-        }
+        this.gameGenre = gameGenre;
     }
 
-    public ArrayList<String> getGenre() {
-        return genre;
+    public String getGenre() {
+        return this.gameGenre;
     }
 
     public String getName() {
@@ -191,9 +173,6 @@ public class Game implements Comparable<Game> {
         this.iconPath = iconPath;
     }
 
-    public String getScreenShotPath() {
-        return screenShotPath;
-    }
 
     public int getPlayTime() {
         return playTime;
@@ -233,6 +212,14 @@ public class Game implements Comparable<Game> {
         }
     }
 
+    public boolean isGameScore() {
+        return isGameScore;
+    }
+
+    public void setGameScore(boolean gameScore) {
+        isGameScore = gameScore;
+    }
+
     public String getGamePrice() {
         return gamePrice;
     }
@@ -262,14 +249,21 @@ public class Game implements Comparable<Game> {
     }
 
     public void setGameScore(String gameScore) {
-        try {
-            float score = Float.parseFloat(gameScore);
-            if (score <= 10 && score > 0)
-                this.gameScore = gameScore;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Score input!!!");
-            this.gameScore = "No Score";
-        }
+        System.out.println(gameScore);
+            try {
+                float score = Float.parseFloat(gameScore);
+
+                if (score <= 10 && score > 0) {
+                    this.gameScore = gameScore;
+                    isGameScore = true;
+                    return;
+                }
+            } catch (Exception e) {
+                isGameScore = false;
+//            JOptionPane.showMessageDialog(null, "Score Input!!!");
+//            System.out.println("Wrong score input!");
+                this.gameScore = "No Score";
+            }
     }
 
     public String getGameHomepage() {

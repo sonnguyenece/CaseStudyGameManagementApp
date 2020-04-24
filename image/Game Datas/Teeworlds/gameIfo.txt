@@ -1,7 +1,19 @@
 Name : Teeworlds
-Description :Teeworlds is a free online multiplayer game, available for all major operating systems. Battle with up to 16 players in a variety of game modes, including Team Deathmatch and Capture The Flag. You can even design your own maps!
-gameID: teeworlds
-genre : action,platform,multi-player
-homepage: https://www.teeworlds.com/
-metacritic score : 8,1
 
+Description :<html>Teeworlds is a free online multiplayer game, available for all major operating systems. Battle with up to 16 players in a variety of game modes, including Team Deathmatch and Capture The Flag. You can even design your own maps!</html>
+
+gameID: teeworlds
+
+genre : action,platform,multi-player
+
+homepage: https://www.teeworlds.com/
+
+metacritic score : 8.1
+
+isSteamGame : No
+
+headerIMG: image/Game Datas/Teeworlds/imageheader.jpg
+
+icon: image/Game Datas/Teeworlds/image/teeWorldsIcon.png
+
+screenshot : image/Game Datas/Teeworlds/image/screenshot1.jpg,image/Game Datas/Teeworlds/image/screenshot2.png,image/Game Datas/Teeworlds/image/screenshot3.png,image/Game Datas/Teeworlds/image/screenshot4.png
