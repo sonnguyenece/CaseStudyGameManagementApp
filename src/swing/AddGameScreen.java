@@ -71,7 +71,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setGameID(gameIDTextField.getText());
                 gameID = gameIDTextField.getText();
             }
         });
@@ -101,7 +100,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setGameGenre(genreTextField.getText());
                 gameGenre = genreTextField.getText();
             }
         });
@@ -109,7 +107,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setGameLanguage(languagesTextFiled.getText());
                 gameLanguage = languagesTextFiled.getText();
             }
         });
@@ -117,7 +114,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setGameSize(sizeOnDiskTextField.getText());
                 gameSize = sizeOnDiskTextField.getText();
             }
         });
@@ -125,7 +121,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setIconPath(iconPathText.getText());
                 gameIcon = iconPathText.getText();
             }
         });
@@ -133,7 +128,6 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setHeaderImage(headerImgPath.getText());
                 gameHeader = headerImgPath.getText();
             }
         });
@@ -141,14 +135,12 @@ public class AddGameScreen extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-//                game.setScreenShot(screenshotsPath.getText());
                 gameScreenshots = screenshotsPath.getText();
             }
         });
         homepageTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-//                game.setGameHomepage(homepageTextField.getText());
                 gameHomepage = homepageTextField.getText();
             }
         });
@@ -195,12 +187,13 @@ public class AddGameScreen extends JDialog {
                         screen.setEnabled(true);
                     } else if (!game.isGameScore()) {
                         gameScr.setVisible(false);
-                        JOptionPane.showMessageDialog(null, "Score Input!!!");
-                        System.out.println("Wrong score input!");
+                        JOptionPane.showMessageDialog(null,
+                                "Wrong Score Input!!!");
                         gameScr.setVisible(true);
                     } else {
                         gameScr.setVisible(false);
-                        JOptionPane.showMessageDialog(null, "Game ID exist!");
+                        JOptionPane.showMessageDialog(null,
+                                "Game ID exist!");
                         gameScr.setVisible(true);
                     }
                 }

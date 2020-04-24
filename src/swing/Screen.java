@@ -1,9 +1,6 @@
 package swing;
 
-import code.CRUDList;
-import code.Game;
-import code.HomeImage;
-import code.Main;
+import code.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +59,6 @@ public class Screen extends JFrame {
     private JMenuBar menuBar;
     private JLabel date;
     private JLabel hour;
-    //    private JButton sortButton;
     private Object specifyJScrollPaneTemp;
     private DefaultListModel defaultListGameModel;
     private DefaultListModel defaultListGameSearchModel;
@@ -99,32 +95,22 @@ public class Screen extends JFrame {
             }
         });
         showCurTime.start();
-        System.out.println(isPressHomeButton);
-//        if (isPressHomeButton) {
-            homeIMGTimer = new Timer(HOME_IMG_DELAY, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    homeImage = new HomeImage();
-                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
-                    displayRightScreen(false);
-                    specifyJpanel.setVisible(true);
-                }
-            });
-            homeIMGTimer.start();
-//        }
+        homeIMGTimer = new Timer(HOME_IMG_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                homeImage = new HomeImage();
+                header.setIcon(new ImageIcon(homeImage.selectionImage()));
+                displayRightScreen(false);
+                specifyJpanel.setVisible(true);
+            }
+        });
+        homeIMGTimer.start();
         displayGameList.setModel(defaultListGameModel);
 
         displayGameList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
                 homeIMGTimer.stop();
-                if (SwingUtilities.isRightMouseButton(me)    // if right mouse button clicked
-                        && !displayGameList.isSelectionEmpty()            // and list selection is not empty
-                        && displayGameList.locationToIndex(me.getPoint()) // and clicked point is
-                        == displayGameList.getSelectedIndex()) {       //   inside selected item bounds
-                    popupMenu.show(displayGameList, me.getX(), me.getY());
-
-                } else if (gameIndex >= 0) {
-
+                if (!displayGameList.isSelectionEmpty()) {
                     isPressHomeButton = false;
                     displayRightScreen(true);
                     gameIndex = displayGameList.getSelectedIndex();
@@ -135,7 +121,6 @@ public class Screen extends JFrame {
                             System.out.println("So many click in gameList !!");
                         }
                     } else {
-//                        gameIndex = gameSearchList.getSelectedIndex();
                         try {
                             selectedGame = crudList.getGameSearchList().get(gameIndex);
                         } catch (Exception exce) {
@@ -146,8 +131,26 @@ public class Screen extends JFrame {
                 }
             }
         });
-        popUpListener();
 
+        displayGameList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)  // if right mouse button clicked
+                        && (crudList.getQuantityGames() > 0))
+                {
+                    if (!isSearching) {
+                        gameIndex = displayGameList.locationToIndex(e.getPoint());
+                        selectedGame = crudList.getGameList().get(gameIndex);
+                    }else {
+                        gameIndex = displayGameList.locationToIndex(e.getPoint());
+                        selectedGame = crudList.getGameSearchList().get(gameIndex);
+                    }
+                    popUpListener();
+                    popUpDisplay(e);
+
+                }
+            }
+        });
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -278,7 +281,14 @@ public class Screen extends JFrame {
             }
         });
 
+    }
 
+    public void popUpDisplay(MouseEvent e) {
+        popupMenu.add(play);
+        popupMenu.add(showInfo);
+        popupMenu.add(edit);
+        popupMenu.add(delete);
+        popupMenu.show(displayGameList, e.getX(), e.getY());
     }
 
     public void displayGameInfo() {
@@ -328,7 +338,6 @@ public class Screen extends JFrame {
     public void setCrudList(CRUDList crudList) {
         this.crudList = crudList;
     }
-
 
     public void displayRightScreen(Boolean b) {
         spaceField.setVisible(b);
@@ -396,12 +405,6 @@ public class Screen extends JFrame {
     }
 
     public void popUpListener() {
-
-        popupMenu.add(play);
-        popupMenu.add(showInfo);
-        popupMenu.add(edit);
-        popupMenu.add(delete);
-
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -419,7 +422,7 @@ public class Screen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
-                        "Do you really want to edit " + selectedGame.getName() + " ?",
+                        "Are you sure? " + selectedGame.getName() + " ?",
                         "EDIT GAME", JOptionPane.WARNING_MESSAGE);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     if (!isSearching) {
@@ -429,7 +432,6 @@ public class Screen extends JFrame {
                         } catch (Exception exc) {
                             System.out.println(exc.getMessage());
                         }
-
                         editScreen.setAlwaysOnTop(true);
                         editScreen.setVisible(true);
                         crudList.deleteGame(gameIndex);

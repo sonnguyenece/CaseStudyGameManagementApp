@@ -3,10 +3,12 @@ package swing;
 import javax.swing.*;
 import java.awt.*;
 
-public class Renderer extends DefaultListCellRenderer implements ListCellRenderer<Object> {
+public class Renderer extends DefaultListCellRenderer
+        implements ListCellRenderer<Object> {
     @Override
-    public Component getListCellRendererComponent(JList<?> jList, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(
+            JList<?> jList, Object value, int index,
+            boolean isSelected, boolean cellHasFocus) {
 
         ImgsNText is = (ImgsNText) value;
         setText(is.getName());

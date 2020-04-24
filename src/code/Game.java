@@ -249,7 +249,6 @@ public class Game implements Comparable<Game>, Serializable {
     }
 
     public void setGameScore(String gameScore) {
-        System.out.println(gameScore);
             try {
                 float score = Float.parseFloat(gameScore);
 
@@ -260,8 +259,6 @@ public class Game implements Comparable<Game>, Serializable {
                 }
             } catch (Exception e) {
                 isGameScore = false;
-//            JOptionPane.showMessageDialog(null, "Score Input!!!");
-//            System.out.println("Wrong score input!");
                 this.gameScore = "No Score";
             }
     }

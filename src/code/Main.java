@@ -28,7 +28,7 @@ public class Main {
             ois.close();
             fis.close();
         } catch (FileNotFoundException e) {
-
+            System.out.println("Can't load fileSave!");
         }
     }
     public static void exportFileSave(Screen screen) {

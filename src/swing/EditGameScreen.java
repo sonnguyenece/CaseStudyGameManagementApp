@@ -45,7 +45,7 @@ public class EditGameScreen extends JDialog {
 
     EditGameScreen(Frame parent, boolean modal, Game editGame) {
         setTitle("ADD GAME");
-        getPreferredSize();
+//        getPreferredSize();
         setSize(800, 700);
         setLocation(280, 50);
         this.setContentPane(mainPanel);

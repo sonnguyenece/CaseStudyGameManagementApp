@@ -84,7 +84,6 @@ public class CRUDList {
         for (int i = 0; i < gameList.size(); i++) {
             if (gameTemp.equals(gameList.get(i))) {
                 gameList.remove(i);
-//                System.out.println(i);
             }
         }
     }
