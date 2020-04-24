@@ -16,6 +16,8 @@ import java.util.Date;
 public class Screen extends JFrame {
     public static final int PLAYBUTTON_WIDTH = 180;
     public static final int PLAYBUTTON_HEIGHT = 50;
+    public static final int HOME_IMG_DELAY = 5000;
+    public static final int SEC_COUNTER = 1000;
     private JPanel mainPanel;
     private JPanel homeSpecifyPanel;
     private JButton homeButton;
@@ -68,7 +70,7 @@ public class Screen extends JFrame {
     private Game selectedGame;
     private boolean isPressHomeButton;
     private HomeImage homeImage;
-    final JPopupMenu popupMenu = new JPopupMenu();
+    private final JPopupMenu popupMenu = new JPopupMenu();
     private final JMenuItem play = new JMenuItem("Play");
     private final JMenuItem showInfo = new JMenuItem("Show");
     private final JMenuItem edit = new JMenuItem("Edit");
@@ -77,7 +79,7 @@ public class Screen extends JFrame {
     private boolean isSearching;
     private EditGameScreen editScreen;
     private Timer showCurTime;
-    private Timer HomeImageTimer ;
+    private Timer homeIMGTimer;
     Screen scn;
 
     public Screen() {
@@ -90,19 +92,31 @@ public class Screen extends JFrame {
         crudList = new CRUDList();
         defaultListGameModel = new DefaultListModel<>();
         specifyJpanel.setVisible(false);
-        isPressHomeButton = false;
-        showCurTime = new Timer(1000, new ActionListener() {
+        showCurTime = new Timer(SEC_COUNTER, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showTime();
             }
         });
         showCurTime.start();
-
+        System.out.println(isPressHomeButton);
+//        if (isPressHomeButton) {
+            homeIMGTimer = new Timer(HOME_IMG_DELAY, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    homeImage = new HomeImage();
+                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
+                    displayRightScreen(false);
+                    specifyJpanel.setVisible(true);
+                }
+            });
+            homeIMGTimer.start();
+//        }
         displayGameList.setModel(defaultListGameModel);
 
         displayGameList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
+                homeIMGTimer.stop();
                 if (SwingUtilities.isRightMouseButton(me)    // if right mouse button clicked
                         && !displayGameList.isSelectionEmpty()            // and list selection is not empty
                         && displayGameList.locationToIndex(me.getPoint()) // and clicked point is
@@ -139,17 +153,13 @@ public class Screen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isPressHomeButton = true;
+                homeIMGTimer.restart();
                 homeImage = new HomeImage();
-
                 header.setIcon(new ImageIcon(homeImage.selectionImage()));
                 displayRightScreen(false);
                 specifyJpanel.setVisible(true);
-
-//                specifyJScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
                 searchTextField.setText("");
                 refreshGameList();
-                crudList.sortByName();
                 crudList.sortByName();
             }
         });
@@ -175,18 +185,19 @@ public class Screen extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                Color color = new Color(100, 160, 0);
+                Color color = new Color(84, 3, 128, 168);
                 playButton.setBackground(color);
+                playButton.setForeground(Color.GREEN);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                Color color = new Color(1, 152, 0);
+                Color color = new Color(9, 132, 9);
                 playButton.setBackground(color);
+                playButton.setForeground(Color.WHITE);
             }
         });
-
 
         sorta_z.addActionListener(new ActionListener() {
             @Override
@@ -226,8 +237,6 @@ public class Screen extends JFrame {
             }
         });
 
-//        Screen scn = this;
-
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -235,7 +244,6 @@ public class Screen extends JFrame {
                         new AddGameScreen(scn, rootPaneCheckingEnabled);
                 addScreen.setAlwaysOnTop(true);
                 addScreen.setVisible(true);
-
             }
         });
 
@@ -321,13 +329,6 @@ public class Screen extends JFrame {
         this.crudList = crudList;
     }
 
-    public boolean isPressHomeButton() {
-        return isPressHomeButton;
-    }
-
-    public void setPressHomeButton(boolean pressHomeButton) {
-        isPressHomeButton = pressHomeButton;
-    }
 
     public void displayRightScreen(Boolean b) {
         spaceField.setVisible(b);
@@ -362,22 +363,6 @@ public class Screen extends JFrame {
             refreshGameList();
         }
         Main.exportFileSave(this);
-
-//        }
-//        if ()
-//        if (this.isPressHomeButton()) {
-//            long startTime = System.currentTimeMillis() / 1000;
-//            long endTime = startTime + 3;
-//            while (this.isPressHomeButton()) {
-//                if (startTime < endTime)
-//                    startTime = System.currentTimeMillis() / 1000;
-//                else {
-//                    header.setIcon(new ImageIcon(homeImage.selectionImage()));
-//                    endTime = System.currentTimeMillis() / 1000 + 3;
-//                }
-//            }
-//        }
-
     }
 
     public void refreshInSearching() {
@@ -406,6 +391,7 @@ public class Screen extends JFrame {
     }
 
     public void autoClickHomeFirst() {
+        isPressHomeButton = true;
         homeButton.doClick();
     }
 

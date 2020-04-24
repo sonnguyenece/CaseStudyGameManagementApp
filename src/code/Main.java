@@ -13,7 +13,7 @@ public class Main {
         Screen screen = new Screen();
         screen.setVisible(true);
         initAddGameList(screen);
-//        inputFileSave(screen);
+        inputFileSave(screen);
         screen.autoClickHomeFirst();
     }
 
