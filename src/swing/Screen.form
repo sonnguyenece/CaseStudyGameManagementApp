@@ -96,10 +96,10 @@
                     <properties>
                       <background color="-10592674"/>
                       <foreground color="-1"/>
-                      <label value="Genre"/>
+                      <label value="Filter"/>
                       <popupMenuVisible value="false"/>
                       <selected value="false"/>
-                      <text value="Genre"/>
+                      <text value="Filter"/>
                       <visible value="true"/>
                     </properties>
                     <border type="none"/>
