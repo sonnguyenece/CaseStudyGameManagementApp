@@ -13,7 +13,7 @@ public class Main {
         Screen screen = new Screen();
         screen.setVisible(true);
         initAddGameList(screen);
-//        inputFileSave(screen);
+        inputFileSave(screen);
         screen.autoClickHomeFirst();
     }
 
@@ -47,26 +47,27 @@ public class Main {
 
     public static void initAddGameList(Screen screen) {
 
-        addHalfLife2(screen);
-
         Game supertux2 = new Game("Supertux 2", false, "supertux2", "image/Game Datas/Supertux2/image/icon.jpg", "3");
         supertux2.setGameScore("5");
 
-        screen.getCrudList().addGame(supertux2);
-
-
         Game left4Dead = new Game("Left4Dead 2", true, "550", "image/Game Datas/Left4Dead 2/image/icon.jpg", "5");
         left4Dead.setGameScore("8.6");
-        screen.getCrudList().addGame(left4Dead);
 
         Game dontStarve = new Game("Don't Starve ", true, "322330", "image/Game Datas/Don't Starve Together/image/icon.jpg", "7");
         dontStarve.setGameScore("8.1");
+
+
+
+        screen.getCrudList().addGame(supertux2);
+
+        screen.getCrudList().addGame(left4Dead);
         screen.getCrudList().addGame(dontStarve);
         screen.getCrudList().sortByName();
     }
 
     public static void addHalfLife2(Screen screen) {
-        Game halfLife = new Game("Half Life 2", true, "220", "image/Game Datas/HalfLife2/image/icon.png", "10");
+        Game halfLife = new Game();
+        halfLife.setName("Half Life 2");
         halfLife.setDescription("<html>Description: Half-Life 2 is a 2004 first-person shooter game developed and published by Valve." +
                 "Like the original Half-Life, it combines shooting, puzzles, and storytelling, and adds features" +
                 "such as vehicles and physics-based gameplay ... The game was created using Valve's Source engine," +
@@ -80,7 +81,10 @@ public class Main {
                 "image/Game Datas/HalfLife2/image/screenshot3.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot2.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot1.jpg,");
-        halfLife.setGameGenre("Fps,  Adventure,");
+        halfLife.setGameGenre("Fps, Adventure");
+
+
+
         screen.getCrudList().addGame(halfLife);
     }
 
