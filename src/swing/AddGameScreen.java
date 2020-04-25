@@ -43,17 +43,18 @@ public class AddGameScreen extends JDialog {
     private ButtonGroup radioGroup;
     private Screen screen;
     private String steamGameSelected;
+    public static final int SCREEN_POS_X = 335;
+    public static final int SCREEN_POS_Y = 57;
 
     AddGameScreen(Frame parent, boolean modal) {
         setTitle("ADD GAME");
         getPreferredSize();
-        setSize(800, 700);
-        setLocation(280, 50);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setLocation(SCREEN_POS_X, SCREEN_POS_Y);
         this.setContentPane(mainPanel);
         this.pack();
         initInitialVar();
         screen = (Screen) parent;
-//        System.out.println(screen);
         radioGroup = new ButtonGroup();
         radioGroup.add(yesRadioButton);
         radioGroup.add(noRadioButton);

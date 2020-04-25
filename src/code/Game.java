@@ -40,6 +40,7 @@ public class Game implements Comparable<Game>, Serializable {
     private static final String NON_STEAM_GAME_ID = "^[0-9a-zA-z].*";
     private static final String GAME_NAME_REGEX = "^[0-9a-zA-z].*";
     private static final String GAME_IMAGE_PATH_REGEX = "^[0-9a-zA-z].*";
+    private static final String GAME_GENRE_REGEX = "^[A-z].*";
 
 
     public Game() {
@@ -50,7 +51,7 @@ public class Game implements Comparable<Game>, Serializable {
     public Game(String name, Boolean isSteamGame, String gameID,
                 String iconPath, String score) {
         setName(name);
-        this.lastPlayed = "Never Play Before";
+        this.lastPlayed = "No Data";
         this.iconPath = iconPath;
         setGameID(gameID, isSteamGame);
         this.isSteamGame = isSteamGame;
@@ -75,7 +76,7 @@ public class Game implements Comparable<Game>, Serializable {
         }
         this.developer = developer;
         this.iconPath = iconPath;
-
+        setGameGenre(gameGenre);
         this.headerImage = headerImage;
         this.description = description;
         setGameID(gameID, isSteamGame);
@@ -141,7 +142,10 @@ public class Game implements Comparable<Game>, Serializable {
     }
 
     public void setGameGenre(String gameGenre) {
-        this.gameGenre = gameGenre;
+        if (gameGenre.length()>0)
+        this.gameGenre =gameGenre.substring(0, 1).
+                toUpperCase() + gameGenre.substring(1);
+        else this.gameGenre= "No Data";
     }
 
     public String getGenre() {
@@ -153,6 +157,7 @@ public class Game implements Comparable<Game>, Serializable {
     }
 
     public void setName(String name) {
+
         this.name = name;
         isValidateName = Pattern.matches(GAME_NAME_REGEX, name);
     }

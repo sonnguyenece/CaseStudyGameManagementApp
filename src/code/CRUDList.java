@@ -3,16 +3,17 @@ package code;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class CRUDList {
     private ArrayList<Game> gameList;
     private ArrayList<Game> gameSearchList;
+    private ArrayList<Game> gameFilterList;
     private int quantityGames;
 
     public CRUDList() {
         gameList = new ArrayList<Game>();
         gameSearchList = new ArrayList<Game>();
+        gameFilterList = new ArrayList<Game>();
         quantityGames = 0;
     }
 
@@ -32,7 +33,12 @@ public class CRUDList {
         this.gameList = gameList;
     }
 
-    public void setGameList(List<Game> gameList) {
+    public ArrayList<Game> getGameFilterList() {
+        return gameFilterList;
+    }
+
+    public void setGameFilterList(ArrayList<Game> gameFilterList) {
+        this.gameFilterList = gameFilterList;
     }
 
     public int getQuantityGames() {
@@ -66,19 +72,19 @@ public class CRUDList {
             }
         }
         if (game.isGameScore()) {
-//            this.gameList.remove(gameEditIndex);
             this.gameList.add(game);
             this.quantityGames++;
             return true;
         }
         return false;
     }
+
     public void editGame(int index) {
 
     }
 
     public void editSearchGame(int index) {
-        delGameInGamelistBySearch(index);
+        delGameInList(index);
     }
 
     public void deleteGame(int index) {
@@ -87,12 +93,12 @@ public class CRUDList {
     }
 
     public void deleteSearchGame(int index) {
-        delGameInGamelistBySearch(index);
+        delGameInList(index);
         gameSearchList.remove(index);
         quantityGames--;
     }
 
-    public void delGameInGamelistBySearch(int index) {
+    public void delGameInList(int index) {
         Game gameTemp = gameSearchList.get(index);
         for (int i = 0; i < gameList.size(); i++) {
             if (gameTemp.equals(gameList.get(i))) {
@@ -142,6 +148,11 @@ public class CRUDList {
             }
         });
     }
+
+    public void filterToSearch() {
+        gameSearchList = gameFilterList;
+    }
+
 
     public void exportToFile() {
 

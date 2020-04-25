@@ -89,22 +89,6 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <grid id="692bb" class="javax.swing.JMenu" binding="filterMenu" layout-manager="CardLayout" hgap="0" vgap="0">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <background color="-10592674"/>
-                      <foreground color="-1"/>
-                      <label value="Filter"/>
-                      <popupMenuVisible value="false"/>
-                      <selected value="false"/>
-                      <text value="Filter"/>
-                      <visible value="true"/>
-                    </properties>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
                   <grid id="f7098" class="javax.swing.JMenu" binding="sortMenu" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -170,6 +154,21 @@
                       </component>
                     </children>
                   </grid>
+                  <component id="72dda" class="javax.swing.JButton" binding="filterBut">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-13816531"/>
+                      <borderPainted value="false"/>
+                      <contentAreaFilled value="false"/>
+                      <defaultCapable value="false"/>
+                      <focusPainted value="false"/>
+                      <focusable value="true"/>
+                      <foreground color="-1"/>
+                      <text value="Genre"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
             </children>
@@ -474,7 +473,7 @@
                                 <children>
                                   <component id="9baa1" class="javax.swing.JLabel" binding="Genre">
                                     <constraints>
-                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                                     </constraints>
                                     <properties>
                                       <background color="-10592674"/>
@@ -508,7 +507,7 @@
                                 <children>
                                   <component id="1ff56" class="javax.swing.JLabel" binding="homepage">
                                     <constraints>
-                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                                     </constraints>
                                     <properties>
                                       <background color="-10592674"/>

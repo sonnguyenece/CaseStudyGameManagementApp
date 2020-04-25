@@ -4,9 +4,9 @@ Description :SuperTux is a open-source classic 2D jump'n run sidescroller game i
 
 gameID: supertux
 
-genre : action,platform,adventure
+genre : Action,Adventure
 
 homepage: supertux2 
 
-score : no score
+score : 4.3
 

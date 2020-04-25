@@ -45,7 +45,7 @@ public class Screen extends JFrame {
     private JLabel screenshotLabel;
     private JScrollPane specifyJScrollPane;
     private JMenu sortMenu;
-    private JMenu filterMenu;
+    private JButton filterBut;
     private JMenuItem sortFromLow;
     private JMenuItem sortFromHigh;
     private JMenuItem sortz_a;
@@ -68,15 +68,15 @@ public class Screen extends JFrame {
     private HomeImage homeImage;
     private final JPopupMenu popupMenu = new JPopupMenu();
     private final JMenuItem play = new JMenuItem("Play");
-    private final JMenuItem showInfo = new JMenuItem("Show");
     private final JMenuItem edit = new JMenuItem("Edit");
     private final JMenuItem delete = new JMenuItem("Delete");
+    private final JMenuItem showInfo = new JMenuItem("Show");
     private int gameIndex;
     private boolean isSearching;
     private EditGameScreen editScreen;
     private Timer showCurTime;
     private Timer homeIMGTimer;
-    private Screen scn;
+    private boolean isFilter;
 
     public Screen() {
         super("GAMELIST MANAGER");
@@ -84,10 +84,28 @@ public class Screen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         Screen scn = this;
+        isFilter = false;
         isSearching = false;
         crudList = new CRUDList();
         defaultListGameModel = new DefaultListModel<>();
+        displayGameList.setModel(defaultListGameModel);
         specifyJpanel.setVisible(false);
+        displayTime();
+
+        eventListenerHandle(scn);
+
+        filterBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FilterScreen ft = new FilterScreen(scn);
+                ft.setVisible(true);
+            }
+        });
+        homeButton.addKeyListener(new KeyAdapter() {
+        });
+    }
+
+    public void displayTime() {
         showCurTime = new Timer(SEC_COUNTER, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,8 +123,6 @@ public class Screen extends JFrame {
             }
         });
         homeIMGTimer.start();
-        displayGameList.setModel(defaultListGameModel);
-        eventListenerHandle(scn);
     }
 
     public void eventListenerHandle(Screen scn) {
@@ -114,7 +130,7 @@ public class Screen extends JFrame {
             public void mouseClicked(MouseEvent me) {
                 homeIMGTimer.stop();
                 if (!displayGameList.isSelectionEmpty()) {
-                    Color selectionColor= new Color(147, 147, 147);
+                    Color selectionColor = new Color(147, 147, 147);
                     displayGameList.setSelectionBackground(selectionColor);
                     displayGameList.setSelectionForeground(Color.WHITE);
 
@@ -292,7 +308,7 @@ public class Screen extends JFrame {
 
     public void popUpDisplay(MouseEvent e) {
         popupMenu.add(play);
-        popupMenu.add(showInfo);
+//        popupMenu.add(showInfo);
         popupMenu.add(edit);
         popupMenu.add(delete);
         popupMenu.show(displayGameList, e.getX(), e.getY());
@@ -307,15 +323,15 @@ public class Screen extends JFrame {
         playButton.setPreferredSize(new Dimension(PLAYBUTTON_WIDTH, PLAYBUTTON_HEIGHT));
         playButton.setIcon(new ImageIcon("image/playIcon.png"));
         lastPlayed.setText("Last Played : " + selectedGame.getLastPlayed() + "        ");
-        lastPlayed.setFont(new Font("Arial", Font.PLAIN, 20));
-        Genre.setText("Genre :"+ selectedGame.getGenre());
-        Genre.setFont(new Font("Arial", Font.PLAIN, 20));
+        lastPlayed.setFont(new Font("Arial", Font.PLAIN, 17));
+        Genre.setText("Genre: " + selectedGame.getGenre());
+        Genre.setFont(new Font("Arial", Font.PLAIN, 17));
         gameScore.setText("             Game Score : " + selectedGame.getGameScore());
-        gameScore.setFont(new Font("Arial", Font.PLAIN, 20));
+        gameScore.setFont(new Font("Arial", Font.PLAIN, 17));
         developer.setText("Developer: " + selectedGame.getDeveloper() + "       ");
-        developer.setFont(new Font("Arial", Font.PLAIN, 20));
+        developer.setFont(new Font("Arial", Font.PLAIN, 17));
         homepage.setText("Homepage: " + selectedGame.getGameHomepage());
-        homepage.setFont(new Font("Arial", Font.PLAIN, 20));
+        homepage.setFont(new Font("Arial", Font.PLAIN, 17));
         homepage.setForeground(Color.white);
         description.setText(selectedGame.getDescription());
         description.setFont(new Font("Consolas", Font.PLAIN, 20));
@@ -331,20 +347,20 @@ public class Screen extends JFrame {
         screenshot4.setIcon(new ImageIcon(selectedGame.getScreenShot().get(lastIndexScr - 3)));
     }
 
+    public boolean isSearching() {
+        return isSearching;
+    }
+
+    public JTextField getSearchTextField() {
+        return searchTextField;
+    }
+
     public CRUDList getCrudList() {
         return crudList;
     }
 
-    public int getGameIndex() {
-        return gameIndex;
-    }
-
-    public void setGameIndex(int gameIndex) {
-        this.gameIndex = gameIndex;
-    }
-
-    public void setCrudList(CRUDList crudList) {
-        this.crudList = crudList;
+    public JButton getFilterBut() {
+        return filterBut;
     }
 
     public void displayRightScreen(Boolean b) {
@@ -364,25 +380,12 @@ public class Screen extends JFrame {
     }
 
     public void refreshGameList() {
-        if (searchTextField.getText().equals("")) isSearching = false;
-        else isSearching = true;
+        if (!isFilter) {
+            if (searchTextField.getText().equals("")) isSearching = false;
+            else isSearching = true;
+        }
         defaultListGameModel.removeAllElements();
         defaultListGameModel.clear();
-        refreshInSearching();
-//        showTime();
-        displayGameList.setCellRenderer(new Renderer());
-        displayGameList.setModel(defaultListGameModel);
-        quantityGames.setText("ALL GAMES (" + crudList.getGameList().size() + ")");
-
-//        if (EditGameScreen.isSaved) {
-//            crudList.addGame(EditGameScreen.game);
-//            EditGameScreen.isSaved = false;
-//            refreshGameList();
-//        }
-        Main.exportFileSave(this);
-    }
-
-    public void refreshInSearching() {
         if (!isSearching) {
             sortMenu.setEnabled(true);
             for (Game g : crudList.getGameList()) {
@@ -394,6 +397,16 @@ public class Screen extends JFrame {
                 defaultListGameModel.addElement(new ImgsNText(g.getName(), new ImageIcon(g.getIconPath())));
             }
         }
+        displayGameList.setCellRenderer(new Renderer());
+        displayGameList.setModel(defaultListGameModel);
+        quantityGames.setText("ALL GAMES (" + crudList.getGameList().size() + ")");
+
+//        if (EditGameScreen.isSaved) {
+//            crudList.addGame(EditGameScreen.game);
+//            EditGameScreen.isSaved = false;
+//            refreshGameList();
+//        }
+        Main.exportFileSave(this);
     }
 
     public void showTime() {
@@ -420,12 +433,7 @@ public class Screen extends JFrame {
                 selectedGame.toStringLastPlay();
             }
         });
-        showInfo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Showed ");
-            }
-        });
+
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -434,22 +442,20 @@ public class Screen extends JFrame {
                         "EDIT GAME", JOptionPane.WARNING_MESSAGE);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     if (!isSearching) {
-//                        try {
                         Game editGame = crudList.getGameList().get(gameIndex);
-                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame, gameIndex);
-//                        } catch (Exception exc) {
-//                            System.out.println(exc.getMessage());
-//                        }
+                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled,
+                                editGame, gameIndex);
                         editScreen.setAlwaysOnTop(true);
                         editScreen.setVisible(true);
+                        homeButton.doClick();
                     } else {
                         Game editGame = crudList.getGameSearchList().get(gameIndex);
-                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame, gameIndex);
+                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled,
+                                editGame, gameIndex);
                         editScreen.setAlwaysOnTop(true);
                         editScreen.setVisible(true);
                     }
-//                    JOptionPane.showMessageDialog(null, "Edited!");
-                    homeButton.doClick();
+
                 }
             }
         });
@@ -470,7 +476,47 @@ public class Screen extends JFrame {
                 }
             }
         });
+
+//        showInfo.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(null, "Showed ");
+//            }
+//        });
     }
 
+    public void filterDisplay() {
+        isFilter = true;
+        searchTextField.setEnabled(false);
+        sortMenu.setEnabled(false);
+        crudList.filterToSearch();
+        isSearching = true;
+        refreshGameList();
+    }
+
+    public void cancelFilter() {
+        filterBut.setEnabled(true);
+        searchTextField.setEnabled(true);
+        sortMenu.setEnabled(true);
+        isFilter = false;
+    }
+
+
+    /*------------------------------Maybe use later------------------------------*/
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    public void setFilterBut(JButton filterBut) {
+        this.filterBut = filterBut;
+    }
+
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
+    }
+
+    public void setCrudList(CRUDList crudList) {
+        this.crudList = crudList;
+    }
 }
 

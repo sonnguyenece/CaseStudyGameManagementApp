@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class EditGameScreen extends JDialog {
+    public static final int SCREEN_POS_X = 335;
+    public static final int SCREEN_POS_Y = 57;
     private JPanel mainPanel;
     private JTextField nameTextField;
     private JTextField gameIDTextField;
@@ -47,13 +49,22 @@ public class EditGameScreen extends JDialog {
 
     EditGameScreen(Frame parent, boolean modal, Game editGame, int gameEditIndex) {
         setTitle("EDIT GAME");
-        setSize(800, 700);
-        setLocation(280, 50);
+        setLocation(SCREEN_POS_X, SCREEN_POS_Y);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
-        initInitialVar(gameEditIndex);
         screen = (Screen) parent;
-//        System.out.println(screen);
+        if (screen.isSearching()) {
+            for (int i = 0; i < screen.getCrudList().getGameList().size(); i++) {
+                if (screen.getCrudList().getGameList().get(i).equals(editGame)) {
+                    gameEditIndex = i;
+                    break;
+                }
+            }
+        }
+
+        initInitialVar(gameEditIndex);
+
         EditGameScreen gameScr = this;
         if (editGame != null) {
             this.editGame = editGame;
@@ -61,7 +72,6 @@ public class EditGameScreen extends JDialog {
         nameTextField.setText(this.editGame.getName());
         gameIDTextField.setText(this.editGame.getGameID());
         screen.setEnabled(false);
-
         displayExistGameInfo();
         eventListenerHandle(gameScr);
     }
@@ -171,6 +181,7 @@ public class EditGameScreen extends JDialog {
                 isSaved = false;
                 dispose();
                 screen.setEnabled(true);
+
             }
         });
 
@@ -194,13 +205,14 @@ public class EditGameScreen extends JDialog {
                             headerImgPath.getText(), languagesTextFiled.getText(),
                             genreTextField.getText(), scoreTextField.getText(),
                             homepageTextField.getText(), isSteamGame);
-                    boolean gameEdited = screen.getCrudList().checkBeforeSave(game,gameIndex);
+                    boolean gameEdited = screen.getCrudList().checkBeforeSave(game, gameIndex);
                     if (gameEdited) {
                         screen.getCrudList().deleteGame(gameIndex);
                         screen.getCrudList().sortByName();
                         gameScr.setVisible(false);
                         JOptionPane.showMessageDialog(null, "Saved");
                         gameScr.setVisible(true);
+                        screen.getSearchTextField().setText("");
                         screen.refreshGameList();
                         dispose();
                         screen.setEnabled(true);
@@ -245,11 +257,11 @@ public class EditGameScreen extends JDialog {
         if (this.editGame.isSteamGame()) {
             yesRadioButton.setSelected(true);
             noRadioButton.setSelected(false);
-            isSteamGame=true;
+            isSteamGame = true;
         } else {
             yesRadioButton.setSelected(false);
             noRadioButton.setSelected(true);
-            isSteamGame=false;
+            isSteamGame = false;
         }
     }
 
