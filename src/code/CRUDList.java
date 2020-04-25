@@ -58,14 +58,27 @@ public class CRUDList {
         return false;
     }
 
+    public boolean checkBeforeSave(Game game, int gameEditIndex) {
+        for (int i = 0; i < this.gameList.size(); i++) {
+            if (i == gameEditIndex) continue;
+            if (game.getGameID().equals(gameList.get(i).getGameID())) {
+                return false;
+            }
+        }
+        if (game.isGameScore()) {
+//            this.gameList.remove(gameEditIndex);
+            this.gameList.add(game);
+            this.quantityGames++;
+            return true;
+        }
+        return false;
+    }
     public void editGame(int index) {
 
     }
 
     public void editSearchGame(int index) {
         delGameInGamelistBySearch(index);
-//        gameSearchList.remove(index);
-//        quantityGames--;
     }
 
     public void deleteGame(int index) {

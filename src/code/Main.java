@@ -13,7 +13,7 @@ public class Main {
         Screen screen = new Screen();
         screen.setVisible(true);
         initAddGameList(screen);
-        inputFileSave(screen);
+//        inputFileSave(screen);
         screen.autoClickHomeFirst();
     }
 
@@ -31,6 +31,7 @@ public class Main {
             System.out.println("Can't load fileSave!");
         }
     }
+
     public static void exportFileSave(Screen screen) {
         ObjectOutputStream oos = null;
         try {
@@ -43,6 +44,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
     public static void initAddGameList(Screen screen) {
         Game supertux2 = new Game("Supertux 2", false, "supertux2", "image/Game Datas/Supertux2/image/icon.jpg", "3");
         supertux2.setGameScore("5");
@@ -68,7 +70,7 @@ public class Main {
                 "image/Game Datas/HalfLife2/image/screenshot3.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot2.jpg," +
                 "image/Game Datas/HalfLife2/image/screenshot1.jpg,");
-
+        halfLife.setGameGenre("FPS, Adventure");
         screen.getCrudList().addGame(supertux2);
         screen.getCrudList().addGame(halfLife);
         screen.getCrudList().addGame(left4Dead);

@@ -377,7 +377,9 @@ public class Game implements Comparable<Game>, Serializable {
                 e.printStackTrace();
             }
         } catch (IOException e) {
-            System.out.println("Wrong gameID");
+            System.out.println("Game.java/Wrong gameID");
+            JOptionPane.showMessageDialog(null,"Wrong GameID",
+                    "GAME CAN NOT LAUNCH", JOptionPane.WARNING_MESSAGE);
         }
         this.isRunning = true;
 

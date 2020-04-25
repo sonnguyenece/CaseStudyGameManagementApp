@@ -12,7 +12,7 @@ public class AddGameScreen extends JDialog {
     private JTextField gameIDTextField;
     private JTextField scoreTextField;
     private JTextField genreTextField;
-    private JButton OKButton;
+    private JButton addButton;
     private JButton CANCELButton;
     private JRadioButton yesRadioButton;
     private JRadioButton noRadioButton;
@@ -53,6 +53,7 @@ public class AddGameScreen extends JDialog {
         this.pack();
         initInitialVar();
         screen = (Screen) parent;
+//        System.out.println(screen);
         radioGroup = new ButtonGroup();
         radioGroup.add(yesRadioButton);
         radioGroup.add(noRadioButton);
@@ -160,7 +161,7 @@ public class AddGameScreen extends JDialog {
             }
         });
 
-        OKButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 steamGameSelected = yesRadioButton.getActionCommand();

@@ -815,7 +815,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="d7590" class="javax.swing.JButton" binding="OKButton" default-binding="true">
+              <component id="d7590" class="javax.swing.JButton" binding="addButton">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false">
                     <preferred-size width="60" height="-1"/>
@@ -824,7 +824,7 @@
                 <properties>
                   <background color="-10592674"/>
                   <foreground color="-1"/>
-                  <text value="OK"/>
+                  <text value="ADD"/>
                 </properties>
               </component>
             </children>

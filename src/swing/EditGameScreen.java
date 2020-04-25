@@ -1,6 +1,7 @@
 package swing;
 
 import code.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,8 +12,7 @@ public class EditGameScreen extends JDialog {
     private JTextField gameIDTextField;
     private JTextField scoreTextField;
     private JTextField genreTextField;
-    private JButton OKButton;
-    private JButton CANCELButton;
+    private JButton saveButton;
     private JRadioButton yesRadioButton;
     private JRadioButton noRadioButton;
     private JTextField languagesTextFiled;
@@ -23,6 +23,7 @@ public class EditGameScreen extends JDialog {
     private JTextField homepageTextField;
     private JTextField descriptionTextField;
     private JTextField developerTextField;
+    private JButton cancelButton;
 
     private String gameName;
     private String gameID;
@@ -41,44 +42,31 @@ public class EditGameScreen extends JDialog {
     public static boolean isSaved;
     private final ButtonGroup radioGroup = new ButtonGroup();
     private Screen screen;
-    public Game editGame;
+    private Game editGame;
+    private int gameIndex;
 
-    EditGameScreen(Frame parent, boolean modal, Game editGame) {
-        setTitle("ADD GAME");
-//        getPreferredSize();
+    EditGameScreen(Frame parent, boolean modal, Game editGame, int gameEditIndex) {
+        setTitle("EDIT GAME");
         setSize(800, 700);
         setLocation(280, 50);
         this.setContentPane(mainPanel);
         this.pack();
-        initInitialVar();
+        initInitialVar(gameEditIndex);
         screen = (Screen) parent;
-        radioGroup.add(yesRadioButton);
-        radioGroup.add(noRadioButton);
+//        System.out.println(screen);
         EditGameScreen gameScr = this;
         if (editGame != null) {
             this.editGame = editGame;
         }
         nameTextField.setText(this.editGame.getName());
         gameIDTextField.setText(this.editGame.getGameID());
+        screen.setEnabled(false);
 
-        if (this.editGame.isSteamGame()) {
-            yesRadioButton.setSelected(true);
-//            isSteamGame = true;
-        } else {
-            yesRadioButton.setSelected(true);
-        }
-        scoreTextField.setText(this.editGame.getGameScore());
-        sizeOnDiskTextField.setText(this.editGame.getGameSize());
-        iconPathText.setText(this.editGame.getIconPath());
-        headerImgPath.setText(this.editGame.getHeaderImage());
-        developerTextField.setText(this.editGame.getDeveloper());
-        homepageTextField.setText(this.editGame.getGameHomepage());
-        descriptionTextField.setText(this.editGame.getDescription());
-        languagesTextFiled.setText(this.editGame.getStringLanguage());
-        genreTextField.setText(this.editGame.getGenre());
-        screenshotsPath.setText(this.editGame.getStringScreenshots());
+        displayExistGameInfo();
+        eventListenerHandle(gameScr);
+    }
 
-        /*----------------------Action Listener----------------------*/
+    private void eventListenerHandle(EditGameScreen gameScr) {
         nameTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -96,13 +84,17 @@ public class EditGameScreen extends JDialog {
         yesRadioButton.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                game.setSteamGame(false);
+                yesRadioButton.setActionCommand("Yes");
+                isSteamGame = true;
+//                game.setSteamGame(false);
             }
         });
         noRadioButton.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                game.setSteamGame(false);
+//                game.setSteamGame(false);
+                isSteamGame = false;
+                yesRadioButton.setActionCommand("No");
             }
         });
         scoreTextField.addKeyListener(new KeyAdapter() {
@@ -173,18 +165,22 @@ public class EditGameScreen extends JDialog {
             }
         });
 
-        CANCELButton.addActionListener(new ActionListener() {
+        cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isSaved = false;
                 dispose();
+                screen.setEnabled(true);
             }
         });
 
-        OKButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (nameTextField.equals("") || gameIDTextField.equals("")) {
+                String steamGameSelected = yesRadioButton.getActionCommand();
+                if (nameTextField.getText().equals("")
+                        || gameIDTextField.getText().equals("")
+                        || steamGameSelected.equals("not selected")) {
                     gameScr.setVisible(false);
                     JOptionPane.showMessageDialog(null,
                             "Wrong Input!", "Warning",
@@ -198,12 +194,28 @@ public class EditGameScreen extends JDialog {
                             headerImgPath.getText(), languagesTextFiled.getText(),
                             genreTextField.getText(), scoreTextField.getText(),
                             homepageTextField.getText(), isSteamGame);
-                    gameScr.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Edited");
-                    gameScr.setVisible(true);
-                    dispose();
+                    boolean gameEdited = screen.getCrudList().checkBeforeSave(game,gameIndex);
+                    if (gameEdited) {
+                        screen.getCrudList().deleteGame(gameIndex);
+                        screen.getCrudList().sortByName();
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Saved");
+                        gameScr.setVisible(true);
+                        screen.refreshGameList();
+                        dispose();
+                        screen.setEnabled(true);
+                    } else if (!game.isGameScore()) {
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null,
+                                "Wrong Score Input!!!");
+                        gameScr.setVisible(true);
+                    } else {
+                        gameScr.setVisible(false);
+                        JOptionPane.showMessageDialog(null,
+                                "Game ID exist!");
+                        gameScr.setVisible(true);
+                    }
                 }
-
             }
         });
         nameTextField.addKeyListener(new KeyAdapter() {
@@ -215,6 +227,30 @@ public class EditGameScreen extends JDialog {
                 gameDeveloper = developerTextField.getText();
             }
         });
+    }
+
+    private void displayExistGameInfo() {
+        scoreTextField.setText(this.editGame.getGameScore());
+        sizeOnDiskTextField.setText(this.editGame.getGameSize());
+        iconPathText.setText(this.editGame.getIconPath());
+        headerImgPath.setText(this.editGame.getHeaderImage());
+        developerTextField.setText(this.editGame.getDeveloper());
+        homepageTextField.setText(this.editGame.getGameHomepage());
+        descriptionTextField.setText(this.editGame.getDescription());
+        languagesTextFiled.setText(this.editGame.getStringLanguage());
+        genreTextField.setText(this.editGame.getGenre());
+        screenshotsPath.setText(this.editGame.getStringScreenshots());
+        radioGroup.add(yesRadioButton);
+        radioGroup.add(noRadioButton);
+        if (this.editGame.isSteamGame()) {
+            yesRadioButton.setSelected(true);
+            noRadioButton.setSelected(false);
+            isSteamGame=true;
+        } else {
+            yesRadioButton.setSelected(false);
+            noRadioButton.setSelected(true);
+            isSteamGame=false;
+        }
     }
 
     public boolean isSaved() {
@@ -233,7 +269,7 @@ public class EditGameScreen extends JDialog {
         this.game = game;
     }
 
-    private void initInitialVar() {
+    private void initInitialVar(int gameEditIndex) {
         gameName = "";
         gameID = "";
         gameScore = "";
@@ -247,7 +283,7 @@ public class EditGameScreen extends JDialog {
         gameDescription = "";
         game = new Game();
         isSaved = false;
+        this.gameIndex = gameEditIndex;
     }
-
 
 }

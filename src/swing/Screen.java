@@ -31,7 +31,7 @@ public class Screen extends JFrame {
     private JButton playButton;
     private JPanel specifyJpanel;
     private JLabel lastPlayed;
-    private JLabel playTime;
+    private JLabel Genre;
     private JLabel gameScore;
     private JLabel developer;
     private JLabel homepage;
@@ -76,10 +76,10 @@ public class Screen extends JFrame {
     private EditGameScreen editScreen;
     private Timer showCurTime;
     private Timer homeIMGTimer;
-    Screen scn;
+    private Screen scn;
 
     public Screen() {
-        super("GAME MANAGEMENT");
+        super("GAMELIST MANAGER");
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
@@ -106,11 +106,18 @@ public class Screen extends JFrame {
         });
         homeIMGTimer.start();
         displayGameList.setModel(defaultListGameModel);
+        eventListenerHandle(scn);
+    }
 
+    public void eventListenerHandle(Screen scn) {
         displayGameList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
                 homeIMGTimer.stop();
                 if (!displayGameList.isSelectionEmpty()) {
+                    Color selectionColor= new Color(147, 147, 147);
+                    displayGameList.setSelectionBackground(selectionColor);
+                    displayGameList.setSelectionForeground(Color.WHITE);
+
                     isPressHomeButton = false;
                     displayRightScreen(true);
                     gameIndex = displayGameList.getSelectedIndex();
@@ -135,7 +142,7 @@ public class Screen extends JFrame {
         displayGameList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)  // if right mouse button clicked
+                if (SwingUtilities.isRightMouseButton(e)
                         && (crudList.getQuantityGames() > 0)) {
                     if (!isSearching) {
                         gameIndex = displayGameList.locationToIndex(e.getPoint());
@@ -144,15 +151,13 @@ public class Screen extends JFrame {
                         gameIndex = displayGameList.locationToIndex(e.getPoint());
                         selectedGame = crudList.getGameSearchList().get(gameIndex);
                     }
-                    popupMenu.add(play);
-                    popupMenu.add(showInfo);
-                    popupMenu.add(edit);
-                    popupMenu.add(delete);
-                    popupMenu.show(displayGameList, e.getX(), e.getY());
+                    popUpDisplay(e);
                 }
             }
         });
-        popUpDisplay();
+        popUpListener(scn);
+        //scn da dc khai bao o tren. tai sao neu tao ham popUpListenner ko tham so
+        //  thi o trong method popUPListener() gia tri scn =null ?
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -255,7 +260,7 @@ public class Screen extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 homepage.setForeground(Color.red);
-                Desktop desktop = java.awt.Desktop.getDesktop();
+                Desktop desktop = Desktop.getDesktop();
                 try {
                     URI defaultURL = new URI("https://www.google.com/");
                     URI homepageURL = new URI(selectedGame.getGameHomepage());
@@ -281,72 +286,17 @@ public class Screen extends JFrame {
             }
         });
 
+        displayGameList.addMouseListener(new MouseAdapter() {
+        });
     }
 
-    public void popUpDisplay() {
+    public void popUpDisplay(MouseEvent e) {
+        popupMenu.add(play);
+        popupMenu.add(showInfo);
+        popupMenu.add(edit);
+        popupMenu.add(delete);
+        popupMenu.show(displayGameList, e.getX(), e.getY());
 
-
-//        popupMenu.show(displayGameList, e.getX(), e.getY());
-        play.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedGame.playGame();
-                selectedGame.toStringLastPlay();
-            }
-        });
-        showInfo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Showed ");
-            }
-        });
-        edit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
-                        "Are you sure? " + selectedGame.getName() + " ?",
-                        "EDIT GAME", JOptionPane.WARNING_MESSAGE);
-                if (dialogResult == JOptionPane.YES_OPTION) {
-                    if (!isSearching) {
-                        try {
-                            Game editGame = crudList.getGameList().get(gameIndex);
-                            editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame);
-                        } catch (Exception exc) {
-                            System.out.println(exc.getMessage());
-                        }
-                        editScreen.setAlwaysOnTop(true);
-                        editScreen.setVisible(true);
-                        crudList.deleteGame(gameIndex);
-                    } else {
-                        Game editGame = crudList.getGameSearchList().get(gameIndex);
-                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame);
-                        editScreen.setAlwaysOnTop(true);
-                        editScreen.setVisible(true);
-                        crudList.deleteSearchGame(gameIndex);
-                    }
-//                    JOptionPane.showMessageDialog(null, "Edited!");
-//                    homeButton.doClick();
-                }
-//
-            }
-        });
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
-                        "Do you really want to remove " + selectedGame.getName() + " ?",
-                        "DELETE GAME", JOptionPane.WARNING_MESSAGE);
-                if (dialogResult == JOptionPane.YES_OPTION) {
-                    if (!isSearching) {
-                        crudList.deleteGame(gameIndex);
-                    } else {
-                        crudList.deleteSearchGame(gameIndex);
-                    }
-                    JOptionPane.showMessageDialog(null, "Deleted!");
-                    homeButton.doClick();
-                }
-            }
-        });
     }
 
     public void displayGameInfo() {
@@ -358,8 +308,8 @@ public class Screen extends JFrame {
         playButton.setIcon(new ImageIcon("image/playIcon.png"));
         lastPlayed.setText("Last Played : " + selectedGame.getLastPlayed() + "        ");
         lastPlayed.setFont(new Font("Arial", Font.PLAIN, 20));
-        playTime.setText("Play Time :");
-        playTime.setFont(new Font("Arial", Font.PLAIN, 20));
+        Genre.setText("Genre :"+ selectedGame.getGenre());
+        Genre.setFont(new Font("Arial", Font.PLAIN, 20));
         gameScore.setText("             Game Score : " + selectedGame.getGameScore());
         gameScore.setFont(new Font("Arial", Font.PLAIN, 20));
         developer.setText("Developer: " + selectedGame.getDeveloper() + "       ");
@@ -424,11 +374,11 @@ public class Screen extends JFrame {
         displayGameList.setModel(defaultListGameModel);
         quantityGames.setText("ALL GAMES (" + crudList.getGameList().size() + ")");
 
-        if (EditGameScreen.isSaved) {
-            crudList.addGame(EditGameScreen.game);
-            EditGameScreen.isSaved = false;
-            refreshGameList();
-        }
+//        if (EditGameScreen.isSaved) {
+//            crudList.addGame(EditGameScreen.game);
+//            EditGameScreen.isSaved = false;
+//            refreshGameList();
+//        }
         Main.exportFileSave(this);
     }
 
@@ -462,9 +412,65 @@ public class Screen extends JFrame {
         homeButton.doClick();
     }
 
-//    public void popUpListener() {
-//
-//    }
+    public void popUpListener(Screen scn) {
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedGame.playGame();
+                selectedGame.toStringLastPlay();
+            }
+        });
+        showInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Showed ");
+            }
+        });
+        edit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
+                        "Do you want to edit " + selectedGame.getName() + " ?",
+                        "EDIT GAME", JOptionPane.WARNING_MESSAGE);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    if (!isSearching) {
+//                        try {
+                        Game editGame = crudList.getGameList().get(gameIndex);
+                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame, gameIndex);
+//                        } catch (Exception exc) {
+//                            System.out.println(exc.getMessage());
+//                        }
+                        editScreen.setAlwaysOnTop(true);
+                        editScreen.setVisible(true);
+                    } else {
+                        Game editGame = crudList.getGameSearchList().get(gameIndex);
+                        editScreen = new EditGameScreen(scn, rootPaneCheckingEnabled, editGame, gameIndex);
+                        editScreen.setAlwaysOnTop(true);
+                        editScreen.setVisible(true);
+                    }
+//                    JOptionPane.showMessageDialog(null, "Edited!");
+                    homeButton.doClick();
+                }
+            }
+        });
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int dialogResult = JOptionPane.showConfirmDialog(mainPanel,
+                        "Do you really want to remove " + selectedGame.getName() + " ?",
+                        "DELETE GAME", JOptionPane.WARNING_MESSAGE);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    if (!isSearching) {
+                        crudList.deleteGame(gameIndex);
+                    } else {
+                        crudList.deleteSearchGame(gameIndex);
+                    }
+                    JOptionPane.showMessageDialog(null, "Deleted!");
+                    homeButton.doClick();
+                }
+            }
+        });
+    }
 
 }
 
